@@ -1,0 +1,162 @@
+
+// Math problem generation functions
+
+// Addition problems
+export const generateAdditionProblem = (difficulty: string) => {
+  let num1 = 0;
+  let num2 = 0;
+  
+  switch (difficulty) {
+    case 'easy':
+      // Single-digit or teens addition (no carrying)
+      num1 = Math.floor(Math.random() * 9) + 1;
+      num2 = Math.floor(Math.random() * (9 - num1)) + 1; // Ensure sum is less than 10
+      break;
+    case 'medium':
+      // Two-digit addition with carrying
+      num1 = Math.floor(Math.random() * 90) + 10;
+      num2 = Math.floor(Math.random() * 90) + 10;
+      
+      // Ensure at least one place needs carrying
+      if ((num1 % 10 + num2 % 10) < 10 && (Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) < 10) {
+        num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1); // Force carrying in ones place
+      }
+      break;
+    case 'hard':
+      // Three-digit addition with multiple carrying
+      num1 = Math.floor(Math.random() * 900) + 100;
+      num2 = Math.floor(Math.random() * 900) + 100;
+      
+      // Ensure multiple places need carrying
+      if ((num1 % 10 + num2 % 10) < 10) {
+        num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1); // Force carrying in ones place
+      }
+      if ((Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) < 10) {
+        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((10 - Math.floor(num2 / 10) % 10 + 1) * 10); // Force carrying in tens place
+      }
+      break;
+  }
+  
+  const sum = num1 + num2;
+  
+  return { num1, num2, sum };
+};
+
+// Subtraction problems
+export const generateSubtractionProblem = (difficulty: string) => {
+  let num1 = 0;
+  let num2 = 0;
+  
+  switch (difficulty) {
+    case 'easy':
+      // Simple subtraction without borrowing
+      num2 = Math.floor(Math.random() * 9) + 1;
+      num1 = num2 + Math.floor(Math.random() * 9) + 1; // Ensure num1 > num2
+      break;
+    case 'medium':
+      // Two-digit subtraction with borrowing
+      num2 = Math.floor(Math.random() * 90) + 10;
+      num1 = Math.floor(Math.random() * 90) + 10;
+      
+      // Ensure num1 > num2
+      if (num1 <= num2) {
+        num1 = num2 + Math.floor(Math.random() * 10) + 1;
+      }
+      
+      // Force borrowing in ones place
+      if ((num1 % 10) >= (num2 % 10)) {
+        // Swap the ones digits
+        const onesDigit1 = num1 % 10;
+        const onesDigit2 = num2 % 10;
+        num1 = Math.floor(num1 / 10) * 10 + onesDigit2;
+        num2 = Math.floor(num2 / 10) * 10 + onesDigit1;
+      }
+      break;
+    case 'hard':
+      // Three-digit subtraction with multiple borrowing
+      num1 = Math.floor(Math.random() * 900) + 100;
+      num2 = Math.floor(Math.random() * 900) + 100;
+      
+      // Ensure num1 > num2
+      if (num1 <= num2) {
+        num1 = num2 + Math.floor(Math.random() * 100) + 1;
+      }
+      
+      // Force borrowing in ones place
+      if ((num1 % 10) >= (num2 % 10)) {
+        num1 = num1 - (num1 % 10) + ((num2 % 10) - 1); // Make ones digit of num1 less than ones digit of num2
+      }
+      
+      // Force borrowing in tens place
+      if ((Math.floor(num1 / 10) % 10) >= (Math.floor(num2 / 10) % 10)) {
+        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((Math.floor(num2 / 10) % 10 - 1) * 10);
+      }
+      break;
+  }
+  
+  const difference = num1 - num2;
+  
+  return { num1, num2, difference };
+};
+
+// Multiplication problems
+export const generateMultiplicationProblem = (difficulty: string) => {
+  let num1 = 0;
+  let num2 = 0;
+  
+  switch (difficulty) {
+    case 'easy':
+      // Simple multiplication (1-10)
+      num1 = Math.floor(Math.random() * 10) + 1;
+      num2 = Math.floor(Math.random() * 10) + 1;
+      break;
+    case 'medium':
+      // Two-digit by one-digit multiplication
+      num1 = Math.floor(Math.random() * 90) + 10;
+      num2 = Math.floor(Math.random() * 9) + 1;
+      break;
+    case 'hard':
+      // Two-digit by two-digit multiplication
+      num1 = Math.floor(Math.random() * 90) + 10;
+      num2 = Math.floor(Math.random() * 90) + 10;
+      break;
+  }
+  
+  const product = num1 * num2;
+  
+  return { num1, num2, product };
+};
+
+// Division problems
+export const generateDivisionProblem = (difficulty: string) => {
+  let dividend = 0;
+  let divisor = 0;
+  let quotient = 0;
+  let remainder = 0;
+  
+  switch (difficulty) {
+    case 'easy':
+      // Simple division with no remainder or small remainder
+      divisor = Math.floor(Math.random() * 9) + 2; // Divisor between 2-10
+      quotient = Math.floor(Math.random() * 9) + 1; // Quotient between 1-10
+      remainder = Math.floor(Math.random() * divisor); // Remainder less than divisor
+      dividend = divisor * quotient + remainder;
+      break;
+    case 'medium':
+      // Two-digit by one-digit division with possible remainder
+      divisor = Math.floor(Math.random() * 9) + 2; // Divisor between 2-10
+      quotient = Math.floor(Math.random() * 9) + 10; // Quotient between 10-19
+      remainder = Math.floor(Math.random() * divisor); // Remainder less than divisor
+      dividend = divisor * quotient + remainder;
+      break;
+    case 'hard':
+      // Three-digit by one-digit or two-digit division with remainder
+      divisor = Math.floor(Math.random() * 9) + 6; // Divisor between 6-15
+      quotient = Math.floor(Math.random() * 10) + 20; // Quotient between 20-30
+      remainder = Math.floor(Math.random() * divisor); // Remainder less than divisor
+      dividend = divisor * quotient + remainder;
+      break;
+  }
+  
+  return { dividend, divisor, quotient, remainder };
+};

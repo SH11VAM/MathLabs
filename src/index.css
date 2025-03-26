@@ -1,10 +1,13 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 196 84% 63%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 334 85% 71%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 210 40% 93%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 45 100% 71%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -32,70 +35,114 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --font-sans: 'Nunito', sans-serif;
+    --font-display: 'Quicksand', sans-serif;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Remove outline for non-keyboard focus */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Custom outline for keyboard focus */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+@layer components {
+  .math-btn {
+    @apply relative overflow-hidden rounded-2xl shadow-button transition-all duration-300 ease-out hover:scale-105 active:scale-95;
+  }
+
+  .math-btn::after {
+    content: '';
+    @apply absolute inset-0 bg-white opacity-0 transition-opacity duration-300;
+  }
+
+  .math-btn:hover::after {
+    @apply opacity-20;
+  }
+
+  .math-card {
+    @apply rounded-3xl bg-white p-6 shadow-card transition-all duration-300;
+  }
+
+  .number-block {
+    @apply flex h-16 w-16 items-center justify-center rounded-xl bg-white text-2xl font-bold shadow-md transition-all duration-300 hover:scale-105 active:scale-95 md:h-20 md:w-20 md:text-3xl;
+  }
+  
+  .number-block-highlight {
+    @apply ring-4 ring-mathPink ring-opacity-50;
+  }
+
+  .heading-xl {
+    @apply text-4xl font-bold text-foreground md:text-5xl xl:text-6xl font-display;
+  }
+
+  .heading-lg {
+    @apply text-3xl font-bold text-foreground md:text-4xl font-display;
+  }
+
+  .heading-md {
+    @apply text-2xl font-bold text-foreground md:text-3xl font-display;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-mathBlue via-mathPink to-mathPurple bg-clip-text text-transparent;
+  }
+}
+
+/* Math problem animation states */
+.hidden-step {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.visible-step {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Star animation */
+.star-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Drag and drop */
+.draggable {
+  cursor: grab;
+  user-select: none;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.droppable {
+  transition: all 0.2s ease;
+}
+
+.droppable.can-drop {
+  background-color: rgba(126, 217, 87, 0.2);
+}
+
+.droppable.active-drop {
+  background-color: rgba(126, 217, 87, 0.4);
 }
