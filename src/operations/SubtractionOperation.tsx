@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import NumberBlock from '../components/NumberBlock';
 import StepAnimation from '../components/StepAnimation';
 import { generateSubtractionProblem } from '../utils/mathProblems';
+import { toast } from "@/hooks/use-toast";
 
 interface SubtractionOperationProps {
   onComplete: () => void;
@@ -18,14 +19,18 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({ onComplete,
   const [borrowedPlaces, setBorrowedPlaces] = useState<number[]>([]);
   const [completed, setCompleted] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [editableProblem, setEditableProblem] = useState({ num1: 0, num2: 0 });
+  const [isCustomProblem, setIsCustomProblem] = useState(false);
   
   useEffect(() => {
     const newProblem = generateSubtractionProblem(difficulty);
     setProblem(newProblem);
+    setEditableProblem({ num1: newProblem.num1, num2: newProblem.num2 });
     setCurrentStep(0);
     setBorrowedPlaces(calculateBorrowedPlaces(newProblem.num1, newProblem.num2));
     setCompleted(false);
     setShowHint(false);
+    setIsCustomProblem(false);
   }, [difficulty]);
   
   const calculateBorrowedPlaces = (a: number, b: number) => {
@@ -52,8 +57,87 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({ onComplete,
     return borrowedPlaces;
   };
   
+  const handleCustomProblem = () => {
+    try {
+      if (editableProblem.num1 < editableProblem.num2) {
+        toast({
+          title: "Invalid subtraction",
+          description: "First number must be greater than or equal to second number",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const customDifference = editableProblem.num1 - editableProblem.num2;
+      const newProblem = {
+        num1: editableProblem.num1,
+        num2: editableProblem.num2,
+        difference: customDifference
+      };
+      
+      setProblem(newProblem);
+      setCurrentStep(0);
+      setBorrowedPlaces(calculateBorrowedPlaces(newProblem.num1, newProblem.num2));
+      setCompleted(false);
+      setShowHint(false);
+      setIsCustomProblem(true);
+      
+      toast({
+        title: "Custom problem created!",
+        description: `${editableProblem.num1} - ${editableProblem.num2} = ${customDifference}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error creating problem",
+        description: "Please enter valid numbers",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const handleEditNum1 = (digit: string, place: number) => {
+    const num1Str = editableProblem.num1.toString().padStart(3, '0');
+    const newDigits = [...num1Str];
+    newDigits[newDigits.length - 1 - place] = digit;
+    const newNum1 = parseInt(newDigits.join(''), 10);
+    setEditableProblem(prev => ({ ...prev, num1: newNum1 }));
+  };
+  
+  const handleEditNum2 = (digit: string, place: number) => {
+    const num2Str = editableProblem.num2.toString().padStart(3, '0');
+    const newDigits = [...num2Str];
+    newDigits[newDigits.length - 1 - place] = digit;
+    const newNum2 = parseInt(newDigits.join(''), 10);
+    setEditableProblem(prev => ({ ...prev, num2: newNum2 }));
+  };
+  
   const getDigit = (number: number, place: number) => {
     return Math.floor((number / Math.pow(10, place)) % 10);
+  };
+  
+  // Get digit with borrowing visualization
+  const getDigitWithBorrowing = (number: number, place: number) => {
+    const digit = getDigit(number, place);
+    
+    if (borrowedPlaces.includes(place) && currentStep >= (place === 0 ? 1 : 3)) {
+      return (
+        <div className="relative">
+          <div className="absolute -top-5 right-0 text-xs text-gray-400 line-through">{digit}</div>
+          <div className="text-mathPink font-bold">{digit === 0 ? 10 : digit + 10}</div>
+        </div>
+      );
+    }
+    
+    if (place > 0 && borrowedPlaces.includes(place - 1) && currentStep >= (place === 1 ? 2 : 4)) {
+      return (
+        <div className="relative">
+          <div className="absolute -top-5 right-0 text-xs text-gray-400 line-through">{digit}</div>
+          <div>{digit - 1}</div>
+        </div>
+      );
+    }
+    
+    return digit;
   };
   
   // Determine steps based on problem
@@ -113,6 +197,22 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({ onComplete,
     }
   };
   
+  // Display the borrowing arrows
+  const renderBorrowArrow = (place: number) => {
+    if (borrowedPlaces.includes(place)) {
+      const stepToShow = place === 0 ? 1 : 3;
+      
+      return (
+        <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
+          <div className="absolute -top-6 right-2 text-mathPink font-bold text-sm flex items-center">
+            <ArrowDown className="h-4 w-4 mr-1" />1
+          </div>
+        </StepAnimation>
+      );
+    }
+    return null;
+  };
+  
   return (
     <div className="flex flex-col items-center p-4">
       <div className="flex justify-end w-full mb-4">
@@ -138,59 +238,42 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({ onComplete,
       </div>
       
       <div className="grid grid-cols-4 gap-3 mb-8">
-        <div className="col-span-1"></div>
-        <div className="col-span-3 grid grid-cols-3 gap-3">
-          {borrowedPlaces.includes(1) && currentStep >= 3 && (
-            <StepAnimation step={3} currentStep={currentStep} delay={500}>
-              <div className="text-mathPink font-bold text-sm flex justify-center items-center h-6">
-                <ArrowDown className="h-4 w-4 mr-1" />1
-              </div>
-            </StepAnimation>
-          )}
-          {borrowedPlaces.includes(0) && currentStep >= 1 && (
-            <div></div>
-          )}
-          {borrowedPlaces.includes(0) && currentStep >= 1 && (
-            <StepAnimation step={1} currentStep={currentStep} delay={500}>
-              <div className="text-mathPink font-bold text-sm flex justify-center items-center h-6">
-                <ArrowDown className="h-4 w-4 mr-1" />1
-              </div>
-            </StepAnimation>
-          )}
-        </div>
-        
         <div className="col-span-1 flex justify-end items-center">
           <span className="text-xl font-medium">−</span>
         </div>
         <div className="col-span-3 grid grid-cols-3 gap-3">
-          <NumberBlock 
-            value={getDigit(problem.num1, 2)} 
-            highlighted={currentStep >= 5}
-          />
-          <NumberBlock 
-            value={getDigit(problem.num1, 1)} 
-            highlighted={currentStep >= 4 && currentStep < 5}
-          />
-          <NumberBlock 
-            value={getDigit(problem.num1, 0)} 
-            highlighted={currentStep >= 1 && currentStep < 4}
-          />
+          {[2, 1, 0].map((place) => (
+            <div key={place} className="relative">
+              <NumberBlock 
+                value={isCustomProblem ? getDigitWithBorrowing(problem.num1, place) : getDigit(editableProblem.num1, place)} 
+                highlighted={
+                  (place === 2 && currentStep >= 5) ||
+                  (place === 1 && currentStep >= 3 && currentStep < 5) ||
+                  (place === 0 && currentStep >= 1 && currentStep < 3)
+                }
+                editable={!isCustomProblem}
+                onChange={(value) => handleEditNum1(value, place)}
+              />
+              {renderBorrowArrow(place)}
+            </div>
+          ))}
         </div>
         
         <div className="col-span-1"></div>
         <div className="col-span-3 grid grid-cols-3 gap-3">
-          <NumberBlock 
-            value={getDigit(problem.num2, 2)} 
-            highlighted={currentStep >= 5}
-          />
-          <NumberBlock 
-            value={getDigit(problem.num2, 1)} 
-            highlighted={currentStep >= 4 && currentStep < 5}
-          />
-          <NumberBlock 
-            value={getDigit(problem.num2, 0)} 
-            highlighted={currentStep >= 1 && currentStep < 4}
-          />
+          {[2, 1, 0].map((place) => (
+            <NumberBlock 
+              key={place}
+              value={isCustomProblem ? getDigit(problem.num2, place) : getDigit(editableProblem.num2, place)} 
+              highlighted={
+                (place === 2 && currentStep >= 5) ||
+                (place === 1 && currentStep >= 4 && currentStep < 5) ||
+                (place === 0 && currentStep >= 2 && currentStep < 3)
+              }
+              editable={!isCustomProblem}
+              onChange={(value) => handleEditNum2(value, place)}
+            />
+          ))}
         </div>
         
         <div className="col-span-4 border-b-2 border-gray-400 my-2"></div>
@@ -217,6 +300,18 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({ onComplete,
           </StepAnimation>
         </div>
       </div>
+      
+      {!isCustomProblem && (
+        <div className="mb-4">
+          <Button 
+            variant="outline" 
+            onClick={handleCustomProblem}
+            className="bg-mathPink bg-opacity-10 text-mathPink hover:bg-mathPink hover:text-white"
+          >
+            Create Custom Problem
+          </Button>
+        </div>
+      )}
       
       <div className="flex flex-col gap-4 items-center">
         {completed ? (
