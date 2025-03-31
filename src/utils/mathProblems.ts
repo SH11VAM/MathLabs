@@ -1,18 +1,17 @@
-
 // Math problem generation functions
 
 // Addition problems
-export const generateAdditionProblem = (difficulty: string) => {
+export const generateAdditionProblem = (classLevel: number) => {
   let num1 = 0;
   let num2 = 0;
   
-  switch (difficulty) {
-    case 'easy':
-      // Single-digit or teens addition (no carrying)
+  switch (classLevel) {
+    case 1:
+      // Single-digit addition (no carrying)
       num1 = Math.floor(Math.random() * 9) + 1;
       num2 = Math.floor(Math.random() * (9 - num1)) + 1; // Ensure sum is less than 10
       break;
-    case 'medium':
+    case 2:
       // Two-digit addition with carrying
       num1 = Math.floor(Math.random() * 90) + 10;
       num2 = Math.floor(Math.random() * 90) + 10;
@@ -22,19 +21,43 @@ export const generateAdditionProblem = (difficulty: string) => {
         num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1); // Force carrying in ones place
       }
       break;
-    case 'hard':
+    case 3:
+    case 4:
       // Three-digit addition with multiple carrying
-      num1 = Math.floor(Math.random() * 900) + 100;
-      num2 = Math.floor(Math.random() * 900) + 100;
+      // First, generate a random sum between 100 and 1999
+      const targetSum = Math.floor(Math.random() * 1900) + 100;
+      
+      // Generate first number between 100 and targetSum-100
+      num1 = Math.floor(Math.random() * (targetSum - 100)) + 100;
+      
+      // Calculate second number to get the target sum
+      num2 = targetSum - num1;
+      
+      // Ensure both numbers are three digits
+      if (num2 < 100) {
+        num2 = 100;
+        num1 = targetSum - num2;
+      }
       
       // Ensure multiple places need carrying
       if ((num1 % 10 + num2 % 10) < 10) {
-        num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1); // Force carrying in ones place
+        // Adjust to force carrying in ones place
+        const onesCarry = 10 - (num1 % 10 + num2 % 10) + 1;
+        num1 = num1 - (num1 % 10) + onesCarry;
+        num2 = targetSum - num1;
       }
+      
       if ((Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) < 10) {
-        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((10 - Math.floor(num2 / 10) % 10 + 1) * 10); // Force carrying in tens place
+        // Adjust to force carrying in tens place
+        const tensCarry = 10 - (Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) + 1;
+        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + (tensCarry * 10);
+        num2 = targetSum - num1;
       }
       break;
+    default:
+      // Default to three-digit addition with possible four-digit sum
+      num1 = Math.floor(Math.random() * 900) + 100;
+      num2 = Math.floor(Math.random() * 900) + 100;
   }
   
   const sum = num1 + num2;
@@ -43,17 +66,17 @@ export const generateAdditionProblem = (difficulty: string) => {
 };
 
 // Subtraction problems
-export const generateSubtractionProblem = (difficulty: string) => {
+export const generateSubtractionProblem = (classLevel: number) => {
   let num1 = 0;
   let num2 = 0;
   
-  switch (difficulty) {
-    case 'easy':
+  switch (classLevel) {
+    case 1:
       // Simple subtraction without borrowing
       num2 = Math.floor(Math.random() * 9) + 1;
       num1 = num2 + Math.floor(Math.random() * 9) + 1; // Ensure num1 > num2
       break;
-    case 'medium':
+    case 2:
       // Two-digit subtraction with borrowing
       num2 = Math.floor(Math.random() * 90) + 10;
       num1 = Math.floor(Math.random() * 90) + 10;
@@ -72,7 +95,8 @@ export const generateSubtractionProblem = (difficulty: string) => {
         num2 = Math.floor(num2 / 10) * 10 + onesDigit1;
       }
       break;
-    case 'hard':
+    case 3:
+    case 4:
       // Three-digit subtraction with multiple borrowing
       num1 = Math.floor(Math.random() * 900) + 100;
       num2 = Math.floor(Math.random() * 900) + 100;
@@ -92,6 +116,13 @@ export const generateSubtractionProblem = (difficulty: string) => {
         num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((Math.floor(num2 / 10) % 10 - 1) * 10);
       }
       break;
+    default:
+      // Default to three-digit subtraction
+      num1 = Math.floor(Math.random() * 900) + 100;
+      num2 = Math.floor(Math.random() * 900) + 100;
+      if (num1 <= num2) {
+        num1 = num2 + Math.floor(Math.random() * 100) + 1;
+      }
   }
   
   const difference = num1 - num2;

@@ -63,6 +63,25 @@
   }
 }
 
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #e5e7eb; /* Gray-200 */
+  border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #77C6F1; /* Gray-500 */
+  border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #50a9da; /* Gray-600 */
+}
+
 @layer components {
   .math-btn {
     @apply relative overflow-hidden rounded-2xl shadow-button transition-all duration-300 ease-out hover:scale-105 active:scale-95;
@@ -145,4 +164,21 @@
 
 .droppable.active-drop {
   background-color: rgba(126, 217, 87, 0.4);
+}
+
+/* Fade-In & Slide-Up Animation for Text */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-animate {
+  opacity: 0; /* Initially hidden */
+  animation: fadeInUp 1s ease-in-out 0.5s forwards;
 }

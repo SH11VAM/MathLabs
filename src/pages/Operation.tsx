@@ -1,155 +1,166 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion';
+import { Plus, Minus, Divide, X, Hash, Square, Hash as Numbers } from 'lucide-react';
 import MathHeader from '../components/MathHeader';
 import AdditionOperation from '../operations/AdditionOperation';
 import SubtractionOperation from '../operations/SubtractionOperation';
 import MultiplicationOperation from '../operations/MultiplicationOperation';
 import DivisionOperation from '../operations/DivisionOperation';
-import StarReward from '../components/StarReward';
+import FactorialOperation from '../operations/FactorialOperation';
+import DecimalOperation from '../operations/DecimalOperation';
+import CountingOperation from '../operations/CountingOperation';
+import ShapesOperation from '../operations/ShapesOperation';
+import NumbersOperation from '../operations/NumbersOperation';
+import { toast } from "@/hooks/use-toast";
 
-const Operation = () => {
-  const { operation } = useParams<{ operation: string }>();
+const Operation: React.FC = () => {
+  const { operation, classLevel } = useParams<{ operation: string; classLevel: string }>();
   const navigate = useNavigate();
-  const [showStars, setShowStars] = useState(false);
-  const [problemNumber, setProblemNumber] = useState(0);
-  const [difficulty, setDifficulty] = useState('easy');
-  
-  useEffect(() => {
-    // Reset problem when operation changes
-    setProblemNumber(prev => prev + 1);
-  }, [operation]);
-  
+  const [problemNumber, setProblemNumber] = useState(1);
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+
   const handleComplete = () => {
-    setShowStars(true);
-    setTimeout(() => {
-      setShowStars(false);
-    }, 3000);
-  };
-  
-  const handleNewProblem = () => {
+    setScore(prev => prev + 1);
     setProblemNumber(prev => prev + 1);
-  };
-  
-  const handleBack = () => {
-    navigate('/');
-  };
-  
-  const getTitle = () => {
-    switch (operation) {
-      case 'addition':
-        return 'Addition';
-      case 'subtraction':
-        return 'Subtraction';
-      case 'multiplication':
-        return 'Multiplication';
-      case 'division':
-        return 'Division';
-      default:
-        return 'Math';
+    
+    if (problemNumber >= 5) {
+      setShowScore(true);
+      toast({
+        title: "Great job!",
+        description: `You completed ${problemNumber} problems with ${score} correct answers!`,
+      });
     }
   };
-  
-  const getColor = () => {
+
+  const handleNextProblem = () => {
+    setProblemNumber(1);
+    setScore(0);
+    setShowScore(false);
+  };
+
+  const getOperationIcon = () => {
     switch (operation) {
       case 'addition':
-        return 'text-mathBlue';
+        return <Plus className="h-6 w-6" />;
       case 'subtraction':
-        return 'text-mathPink';
+        return <Minus className="h-6 w-6" />;
       case 'multiplication':
-        return 'text-mathPurple';
+        return <X className="h-6 w-6" />;
       case 'division':
-        return 'text-mathGreen';
+        return <Divide className="h-6 w-6" />;
+      case 'factorial':
+        return <X className="h-6 w-6" />;
+      case 'decimal':
+        return <X className="h-6 w-6" />;
+      case 'counting':
+        return <Hash className="h-6 w-6" />;
+      case 'shapes':
+        return <Square className="h-6 w-6" />;
+      case 'numbers':
+        return <Numbers className="h-6 w-6" />;
       default:
-        return 'text-foreground';
+        return null;
     }
   };
-  
+
+  const getColor = (operation: string) => {
+    switch (operation) {
+      case 'addition':
+        return 'bg-mathBlue';
+      case 'subtraction':
+        return 'bg-mathGreen';
+      case 'multiplication':
+        return 'bg-mathPurple';
+      case 'division':
+        return 'bg-mathOrange';
+      case 'factorial':
+        return 'bg-mathPink';
+      case 'decimal':
+        return 'bg-mathYellow';
+      case 'counting':
+        return 'bg-mathTeal';
+      case 'shapes':
+        return 'bg-mathIndigo';
+      case 'numbers':
+        return 'bg-mathRed';
+      default:
+        return 'bg-mathBlue';
+    }
+  };
+
   const renderOperation = () => {
     switch (operation) {
       case 'addition':
-        return <AdditionOperation key={problemNumber} onComplete={handleComplete} difficulty={difficulty} />;
+        return <AdditionOperation key={problemNumber} onComplete={handleComplete} />;
       case 'subtraction':
-        return <SubtractionOperation key={problemNumber} onComplete={handleComplete} difficulty={difficulty} />;
+        return <SubtractionOperation key={problemNumber} onComplete={handleComplete} />;
       case 'multiplication':
-        return <MultiplicationOperation key={problemNumber} onComplete={handleComplete} difficulty={difficulty} />;
+        return <MultiplicationOperation key={problemNumber} onComplete={handleComplete} />;
       case 'division':
-        return <DivisionOperation key={problemNumber} onComplete={handleComplete} difficulty={difficulty} />;
+        return <DivisionOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'factorial':
+        return <FactorialOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'decimal':
+        return <DecimalOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'counting':
+        return <CountingOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'shapes':
+        return <ShapesOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'numbers':
+        return <NumbersOperation key={problemNumber} onComplete={handleComplete} />;
       default:
-        return <div>Operation not found</div>;
+        return <AdditionOperation key={problemNumber} onComplete={handleComplete} />;
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <MathHeader />
       
-      <StarReward show={showStars} />
-      
       <main className="flex-1 px-6 py-8 md:px-12 md:py-10 max-w-7xl mx-auto w-full">
-        <div className="flex justify-between items-center mb-8">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="rounded-full hover:bg-muted" 
-            onClick={handleBack}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className={`p-2 rounded-lg bg-white ${getColor(operation || '')} bg-opacity-10`}>
+              {getOperationIcon()}
+            </div>
+            <h1 className="heading-xl capitalize">
+              {operation}
+            </h1>
+          </div>
           
-          <h1 className={`heading-lg ${getColor()}`}>{getTitle()}</h1>
-          
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="rounded-full hover:bg-muted" 
-            onClick={handleNewProblem}
-          >
-            <RefreshCw className="h-5 w-5" />
-          </Button>
-        </div>
-        
-        <motion.div
-          key={problemNumber}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="math-card mx-auto max-w-4xl"
-        >
-          {renderOperation()}
-        </motion.div>
-        
-        <div className="mt-6 flex justify-center">
-          <div className="rounded-full bg-white shadow-sm p-2 flex gap-2">
-            <Button 
-              variant={difficulty === 'easy' ? 'default' : 'outline'} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setDifficulty('easy')}
-            >
-              Easy
-            </Button>
-            <Button 
-              variant={difficulty === 'medium' ? 'default' : 'outline'} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setDifficulty('medium')}
-            >
-              Medium
-            </Button>
-            <Button 
-              variant={difficulty === 'hard' ? 'default' : 'outline'} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setDifficulty('hard')}
-            >
-              Hard
-            </Button>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-muted-foreground">
+              Problem {problemNumber}/5
+            </div>
+            <div className="text-sm font-medium">
+              Score: {score}
+            </div>
           </div>
         </div>
+
+        {showScore ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <h2 className="text-2xl font-bold mb-4">Practice Complete!</h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              You got {score} out of 5 problems correct!
+            </p>
+            <Button
+              onClick={handleNextProblem}
+              className="bg-mathBlue hover:bg-mathBlue/90"
+            >
+              Try Again
+            </Button>
+          </motion.div>
+        ) : (
+          renderOperation()
+        )}
       </main>
     </div>
   );

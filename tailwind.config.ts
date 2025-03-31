@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +18,26 @@ export default {
 			}
 		},
 		extend: {
+			animation: {
+				fadeInUp: "fadeInUp 1s ease-in-out forwards",
+				"gradient-x": "gradient-x 15s ease infinite",
+			},
+			keyframes: {
+				fadeInUp: {
+					"0%": { opacity: 0, transform: "translateY(10px)" },
+					"100%": { opacity: 1, transform: "translateY(0)" },
+				},
+				"gradient-x": {
+					"0%, 100%": {
+						"background-size": "200% 200%",
+						"background-position": "left center",
+					},
+					"50%": {
+						"background-size": "200% 200%",
+						"background-position": "right center",
+					},
+				},
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -54,9 +73,9 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				// Math Fun colors
-				mathBlue: "#4FC4F6",
-				mathPink: "#FF6B9E",
-				mathYellow: "#FFD56B",
+				mathBlue: "#77C6F1",
+				mathPink: "#F74301",
+				mathYellow: "#FFCA1C",
 				mathGreen: "#7ED957",
 				mathPurple: "#9B87F5",
 				sidebar: {
