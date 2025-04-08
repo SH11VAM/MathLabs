@@ -1,234 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Check, Volume2 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import NumberBlock from '../components/NumberBlock';
-import StepAnimation from '../components/StepAnimation';
-import { toast } from "@/hooks/use-toast";
+import ComparisonGame from '@/components/ComparisonGame'
+import React from 'react'
 
-interface NumbersOperationProps {
-  onComplete: () => void;
-}
-
-const NumbersOperation: React.FC<NumbersOperationProps> = ({ onComplete }) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completed, setCompleted] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState<'greater' | 'less' | 'equal' | null>(null);
-  const [numbers, setNumbers] = useState<{ num1: number; num2: number }>({ num1: 0, num2: 0 });
-  
-  useEffect(() => {
-    generateNumbers();
-  }, []);
-  
-  const generateNumbers = () => {
-    // Generate two numbers between 1 and 99
-    const num1 = Math.floor(Math.random() * 99) + 1;
-    const num2 = Math.floor(Math.random() * 99) + 1;
-    setNumbers({ num1, num2 });
-  };
-  
-  const getDigit = (number: number, place: number) => {
-    return Math.floor((number / Math.pow(10, place)) % 10);
-  };
-  
-  const handleAnswer = (answer: 'greater' | 'less' | 'equal') => {
-    setSelectedAnswer(answer);
-    const correctAnswer = numbers.num1 > numbers.num2 ? 'greater' : 
-                         numbers.num1 < numbers.num2 ? 'less' : 'equal';
-    
-    if (answer === correctAnswer) {
-      setCompleted(true);
-      onComplete();
-      speakInstruction(`Correct! ${numbers.num1} ${getSymbol(correctAnswer)} ${numbers.num2}`);
-    } else {
-      toast({
-        title: "Try again!",
-        description: "Think about the place values of each digit",
-        variant: "destructive",
-      });
-    }
-  };
-  
-  const getSymbol = (answer: 'greater' | 'less' | 'equal' | null) => {
-    switch (answer) {
-      case 'greater':
-        return '>';
-      case 'less':
-        return '<';
-      case 'equal':
-        return '=';
-      default:
-        return '';
-    }
-  };
-  
-  const speakInstruction = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1.1;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-  
-  const steps = [
-    {
-      instruction: "Let's compare these numbers",
-      voice: `Let's compare ${numbers.num1} and ${numbers.num2}. Look at each digit's place value.`
-    },
-    {
-      instruction: "Compare the tens place",
-      voice: `First, look at the tens place. ${getDigit(numbers.num1, 1)} tens and ${getDigit(numbers.num2, 1)} tens.`
-    },
-    {
-      instruction: "Compare the ones place",
-      voice: `Now, look at the ones place. ${getDigit(numbers.num1, 0)} ones and ${getDigit(numbers.num2, 0)} ones.`
-    },
-    {
-      instruction: "Which symbol should we use?",
-      voice: `Which symbol should we use to compare ${numbers.num1} and ${numbers.num2}?`
-    }
-  ];
-  
+const NumbersOperation = () => {
   return (
-    <div className="flex flex-col items-center p-4">
-      <div className="flex justify-end w-full mb-4">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="rounded-full" 
-          onClick={() => speakInstruction(steps[currentStep].voice)}
-        >
-          <Volume2 className="h-5 w-5" />
-        </Button>
-      </div>
-      
-      <div className="mb-8 text-center">
-        <h3 className="text-xl font-medium text-muted-foreground mb-2">
-          {steps[currentStep].instruction}
-        </h3>
-        {showHint && (
-          <p className="text-sm text-muted-foreground">
-            {steps[currentStep].voice}
+    <div className="min-h-screen bg-gradient-to-b from-white to-magic-light-purple/20">
+      <div className="container mx-auto px-4 py-8">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-magic-purple mb-2 animate-fade-in">
+            Magic Number Line 🪄
+          </h1>
+          <p className="text-xl text-gray-600 animate-slide-right">
+            Learn which number is bigger, smaller, or equal!
           </p>
-        )}
-      </div>
-      
-      <div className="grid grid-cols-5 gap-3 mb-8">
-        <div className="col-span-1 flex justify-end items-center">
-          <span className="text-xl font-medium">Compare:</span>
-        </div>
-        <div className="col-span-4 grid grid-cols-3 gap-3">
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-2">First Number</div>
-            <div className="grid grid-cols-2 gap-2">
-              <NumberBlock 
-                value={getDigit(numbers.num1, 1)} 
-                highlighted={currentStep >= 1}
-              />
-              <NumberBlock 
-                value={getDigit(numbers.num1, 0)} 
-                highlighted={currentStep >= 2}
-              />
-            </div>
-            <div className="text-lg font-bold mt-2">{numbers.num1}</div>
+        </header>
+        
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 animate-scale-up">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-magic-blue mb-2">
+              👧👦 Welcome Kids! Let's Compare Numbers
+            </h2>
+            <p className="text-lg text-gray-600">
+              The number line starts with small numbers on the left and big numbers on the right.
+            </p>
           </div>
           
-          <div className="flex items-center justify-center">
-            {currentStep >= 3 && !completed ? (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => handleAnswer('greater')}
-                  className={`text-2xl font-bold ${
-                    selectedAnswer === 'greater' 
-                      ? 'bg-mathGreen bg-opacity-20 text-mathGreen' 
-                      : ''
-                  }`}
-                >
-                  &gt;
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleAnswer('less')}
-                  className={`text-2xl font-bold ${
-                    selectedAnswer === 'less' 
-                      ? 'bg-mathGreen bg-opacity-20 text-mathGreen' 
-                      : ''
-                  }`}
-                >
-                  &lt;
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleAnswer('equal')}
-                  className={`text-2xl font-bold ${
-                    selectedAnswer === 'equal' 
-                      ? 'bg-mathGreen bg-opacity-20 text-mathGreen' 
-                      : ''
-                  }`}
-                >
-                  =
-                </Button>
-              </div>
-            ) : (
-              <div className="text-3xl font-bold w-8 h-8 flex items-center justify-center">
-                {getSymbol(selectedAnswer)}
-              </div>
-            )}
-          </div>
+          <ComparisonGame />
           
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-2">Second Number</div>
-            <div className="grid grid-cols-2 gap-2">
-              <NumberBlock 
-                value={getDigit(numbers.num2, 1)} 
-                highlighted={currentStep >= 1}
-              />
-              <NumberBlock 
-                value={getDigit(numbers.num2, 0)} 
-                highlighted={currentStep >= 2}
-              />
+          <div className="mt-8 border-t border-gray-200 pt-6">
+            <h3 className="text-xl font-bold text-center mb-4">🎯 Remember:</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="bg-magic-yellow/20 p-4 rounded-lg">
+                <p className="text-lg">
+                  👉 When a number is more to the <strong>right</strong>, it is <strong>greater</strong>.
+                </p>
+              </div>
+              <div className="bg-magic-pink/20 p-4 rounded-lg">
+                <p className="text-lg">
+                  👉 When a number is more to the <strong>left</strong>, it is <strong>less</strong>.
+                </p>
+              </div>
+              <div className="bg-magic-green/20 p-4 rounded-lg">
+                <p className="text-lg">
+                  👉 When two numbers are at the <strong>same spot</strong>, they are <strong>equal</strong>.
+                </p>
+              </div>
             </div>
-            <div className="text-lg font-bold mt-2">{numbers.num2}</div>
           </div>
         </div>
-      </div>
-      
-      <div className="flex flex-col items-center gap-4">
-        {completed ? (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          >
-            <Button 
-              className="bg-mathGreen hover:bg-mathGreen/90 px-8"
-              onClick={() => window.location.reload()}
-            >
-              <Check className="h-5 w-5 mr-2" />
-              Great job!
-            </Button>
-          </motion.div>
-        ) : (
-          <div className="flex gap-4">
-            <Button
-              variant="outline"
-              onClick={() => setShowHint(!showHint)}
-            >
-              {showHint ? "Hide Hint" : "Show Hint"}
-            </Button>
-            <Button 
-              onClick={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
-            >
-              Next Step
-            </Button>
-          </div>
-        )}
+        
+        <footer className="text-center mt-8 text-gray-500 text-sm">
+          <p>© 2025 Magic Number Line | Fun Learning for Kids</p>
+        </footer>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NumbersOperation; 
+export default NumbersOperation

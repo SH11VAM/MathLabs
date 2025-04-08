@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, X } from "lucide-react";
 
 interface Operation {
   name: string;
@@ -11,6 +11,12 @@ interface Operation {
 
 interface ClassOperations {
   [key: string]: Operation[];
+}
+
+interface SidebarProps {
+  selectedClass?: string;
+  selectedOperation?: string;
+  onClose?: () => void;
 }
 
 const classOperations: ClassOperations = {
@@ -73,7 +79,7 @@ const classOperations: ClassOperations = {
   ],
 };
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<SidebarProps> = ({ selectedClass, selectedOperation, onClose }) => {
   const [expandedClasses, setExpandedClasses] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -87,35 +93,53 @@ const Sidebar: React.FC = () => {
 
   const handleOperationClick = (path: string) => {
     navigate(path);
+    if (onClose) onClose();
   };
 
   return (
-    <div className="w-64 h-screen overflow-y-auto bg-white p-4 shadow-lg scroll-smooth scrollbar">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="w-[280px] sm:w-64 h-screen overflow-y-auto bg-white shadow-lg scroll-smooth scrollbar fixed md:static inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out">
+      {/* Mobile close button */}
+      <div className="md:hidden flex justify-end p-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onClose}
+          className="hover:bg-gray-100"
+        >
+          <X className="h-5 w-5" />
+        </Button>
+      </div>
+
+      <div className="flex items-center gap-2 p-4 md:p-4">
         <button 
-          onClick={() => navigate('/')}
+          onClick={() => {
+            navigate('/');
+            if (onClose) onClose();
+          }}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <img
             src="/YoungLabsLogofan.png"
             alt="YoungLabs Logo"
-            width={50}
-            height={50}
+            width={40}
+            height={40}
             className="animate-[spin_1.5s_linear_infinite]"
           />
-          <h2 className="text-xl font-bold text-animate text-[#55D400] bg-clip-text text-transparent bg-gradient-to-r from-mathBlue to-mathPurple">MathLabs</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-animate text-[#55D400]">Younglabs</h2>
         </button>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1 p-4">
         {Object.entries(classOperations).map(([className, operations]) => (
           <div key={className}>
             <Button
               variant="ghost"
-              className="w-full justify-between"
+              className={`w-full justify-between text-sm sm:text-base ${
+                selectedClass === className ? 'bg-gray-100' : ''
+              }`}
               onClick={() => toggleClass(className)}
             >
-              {className}
+              <span>{className}</span>
               {expandedClasses.includes(className) ? (
                 <ChevronDown className="h-4 w-4" />
               ) : (
@@ -123,12 +147,14 @@ const Sidebar: React.FC = () => {
               )}
             </Button>
             {expandedClasses.includes(className) && (
-              <div className="ml-4 space-y-1">
+              <div className="ml-4 space-y-1 mt-1">
                 {operations.map((operation) => (
                   <Button
                     key={operation.path}
                     variant="ghost"
-                    className="w-full justify-start"
+                    className={`w-full justify-start text-sm sm:text-base ${
+                      selectedOperation === operation.path.split('/')[1] ? 'bg-gray-100' : ''
+                    }`}
                     onClick={() => handleOperationClick(operation.path)}
                   >
                     <span className="mr-2">{operation.icon}</span>

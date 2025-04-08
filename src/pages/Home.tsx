@@ -14,7 +14,7 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4 py-16 relative">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-mathBlue to-mathPurple">
-              Welcome to MathLabs Adventure
+              Welcome to Younglabs Adventure
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               Your interactive journey through mathematics, from basic operations to advanced concepts.

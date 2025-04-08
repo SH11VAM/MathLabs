@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Check, Volume2 } from "lucide-react";
+import { ArrowDown, Check, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NumberBlock from "../components/NumberBlock";
 import StepAnimation from "../components/StepAnimation";
 import { generateSubtractionProblem } from "../utils/mathProblems";
 import { toast } from "@/hooks/use-toast";
+import { useParams } from "react-router-dom";
 
 interface SubtractionOperationProps {
   onComplete: () => void;
@@ -14,6 +15,9 @@ interface SubtractionOperationProps {
 const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   onComplete,
 }) => {
+  const { classLevel } = useParams();
+  const level = parseInt(classLevel || "1", 10);
+  
   const [problem, setProblem] = useState({ num1: 0, num2: 0, difference: 0 });
   const [currentStep, setCurrentStep] = useState(0);
   const [borrowedPlaces, setBorrowedPlaces] = useState<number[]>([]);
@@ -22,9 +26,10 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   const [editableProblem, setEditableProblem] = useState({ num1: 0, num2: 0 });
   const [isCustomProblem, setIsCustomProblem] = useState(false);
   const [userInput, setUserInput] = useState({ num1: "", num2: "" });
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
-    const newProblem = generateSubtractionProblem(1);
+    const newProblem = generateSubtractionProblem(level);
     setProblem(newProblem);
     setEditableProblem({ num1: newProblem.num1, num2: newProblem.num2 });
     setCurrentStep(0);
@@ -34,19 +39,23 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     setCompleted(false);
     setShowHint(false);
     setIsCustomProblem(false);
-  }, []);
+  }, [level]);
+
+
+  const marginClass = level === 1 ? "mr-44" : level === 2 ? "mr-24" : "mr-0";
+  const marginClass2 = level === 1 ? "justify-self-center" : "justify-self-end";
 
   const calculateBorrowedPlaces = (a: number, b: number) => {
     const borrowedPlaces: number[] = [];
-
-    const aStr = a.toString().padStart(3, "0");
-    const bStr = b.toString().padStart(3, "0");
+    const maxDigits = Math.max(getDigitCount(a), getDigitCount(b));
+    const aStr = a.toString().padStart(maxDigits, "0");
+    const bStr = b.toString().padStart(maxDigits, "0");
 
     let borrowing = false;
 
-    for (let i = 0; i < 3; i++) {
-      const digitA = parseInt(aStr[2 - i], 10);
-      const digitB = parseInt(bStr[2 - i], 10);
+    for (let i = 0; i < maxDigits; i++) {
+      const digitA = parseInt(aStr[maxDigits - 1 - i], 10);
+      const digitB = parseInt(bStr[maxDigits - 1 - i], 10);
 
       if (digitA < digitB || (digitA === digitB && borrowing)) {
         borrowedPlaces.push(i);
@@ -173,6 +182,39 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     return null;
   };
 
+  const getDigitCount = (num: number) => {
+    return num.toString().length;
+  };
+
+  const getMaxDigits = () => {
+    const num1 = isCustomProblem ? problem.num1 : editableProblem.num1;
+    const num2 = isCustomProblem ? problem.num2 : editableProblem.num2;
+    const difference = num1 - num2;
+
+    // For Class 1, always show single digit
+    if (level === 1) {
+      return 1;
+    }
+
+    // For Class 2, show two digits
+    if (level === 2) {
+      return 2;
+    }
+
+    // For Class 3, show three digits
+    if (level === 3) {
+      return 3;
+    }
+
+    // For other classes, show appropriate number of digits
+    return Math.max(getDigitCount(num1), getDigitCount(num2));
+  };
+
+  const getPlaceValues = () => {
+    const maxDigits = getMaxDigits();
+    return Array.from({ length: maxDigits }, (_, i) => maxDigits - 1 - i);
+  };
+
   // Determine steps based on problem
   const steps = [
     {
@@ -216,9 +258,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
       instruction: "Subtract the tens place",
       voice: `Subtract the tens place: ${
         borrowedPlaces.includes(1)
-          ? getDigit(problem.num1, 1) +
-            10 -
-            (borrowedPlaces.includes(0) ? 1 : 0)
+          ? getDigit(problem.num1, 1) + 10 - (borrowedPlaces.includes(0) ? 1 : 0)
           : getDigit(problem.num1, 1) - (borrowedPlaces.includes(0) ? 1 : 0)
       } minus ${getDigit(problem.num2, 1)} equals ${getDigit(
         problem.difference,
@@ -253,12 +293,11 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   };
 
   const speakInstruction = (text: string) => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9; // Slightly slower
-      utterance.pitch = 1.1; // Slightly higher pitch (kid-friendly)
-      window.speechSynthesis.speak(utterance);
-    }
+    if (isMuted) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9; // Slightly slower
+    utterance.pitch = 1.1; // Slightly higher pitch (kid-friendly)
+    window.speechSynthesis.speak(utterance);
   };
 
   // Display the borrowing arrows
@@ -283,12 +322,10 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full"
-          onClick={() =>
-            speakInstruction(steps[currentStep]?.voice || steps[0].voice)
-          }
+          onClick={() => setIsMuted(!isMuted)}
+          className="hover:bg-gray-100"
         >
-          <Volume2 className="h-5 w-5" />
+          {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
         </Button>
       </div>
 
@@ -337,12 +374,9 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
       </div>
 
       <div className="grid grid-cols-4 gap-3 mb-8">
-
-
-        <div className="col-span-1 "></div>
-
+        <div className="col-span-1"></div>
         <div className="col-span-3 grid grid-cols-3 gap-3">
-          {[2, 1, 0].map((place) => (
+          {getPlaceValues().map((place) => (
             <div key={place} className="relative">
               <NumberBlock
                 value={
@@ -364,17 +398,12 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
           ))}
         </div>
 
-
-
-
-
         <div className="col-span-1 flex justify-end items-center">
           <span className="text-6xl font-medium">−</span>
         </div>
 
-
         <div className="col-span-3 grid grid-cols-3 gap-3">
-          {[2, 1, 0].map((place) => (
+          {getPlaceValues().map((place) => (
             <NumberBlock
               key={place}
               value={
@@ -396,25 +425,21 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         <div className="col-span-4 border-b-2 border-gray-400 my-2"></div>
 
         <div className="col-span-1"></div>
-        <div className="col-span-3 flex gap-3 justify-self-end">
-          <StepAnimation step={5} currentStep={currentStep}>
-            <NumberBlock
-              value={getDigit(problem.difference, 2)}
-              color={completed ? "bg-mathGreen bg-opacity-20" : "bg-white"}
-            />
-          </StepAnimation>
-          <StepAnimation step={4} currentStep={currentStep}>
-            <NumberBlock
-              value={getDigit(problem.difference, 1)}
-              color={completed ? "bg-mathGreen bg-opacity-20" : "bg-white"}
-            />
-          </StepAnimation>
-          <StepAnimation step={2} currentStep={currentStep}>
-            <NumberBlock
-              value={getDigit(problem.difference, 0)}
-              color={completed ? "bg-mathGreen bg-opacity-20" : "bg-white"}
-            />
-          </StepAnimation>
+        <div className={`col-span-3 flex gap-3 ${marginClass2}
+        ${marginClass}`}
+        >
+          {getPlaceValues().map((place) => (
+            <StepAnimation
+              key={place}
+              step={place === 0 ? 1 : place === 1 ? 3 : 5}
+              currentStep={currentStep}
+            >
+              <NumberBlock
+                value={getDigit(problem.difference, place)}
+                color={completed ? "bg-mathGreen bg-opacity-20" : "bg-white"}
+              />
+            </StepAnimation>
+          ))}
         </div>
       </div>
 

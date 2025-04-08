@@ -44,23 +44,23 @@ const Operation: React.FC = () => {
   const getOperationIcon = () => {
     switch (operation) {
       case 'addition':
-        return <Plus className="h-6 w-6" />;
+        return <Plus className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'subtraction':
-        return <Minus className="h-6 w-6" />;
+        return <Minus className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'multiplication':
-        return <X className="h-6 w-6" />;
+        return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'division':
-        return <Divide className="h-6 w-6" />;
+        return <Divide className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'factorial':
-        return <X className="h-6 w-6" />;
+        return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'decimal':
-        return <X className="h-6 w-6" />;
+        return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'counting':
-        return <Hash className="h-6 w-6" />;
+        return <Hash className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'shapes':
-        return <Square className="h-6 w-6" />;
+        return <Square className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'numbers':
-        return <Numbers className="h-6 w-6" />;
+        return <Numbers className="h-5 w-5 sm:h-6 sm:w-6" />;
       default:
         return null;
     }
@@ -120,13 +120,13 @@ const Operation: React.FC = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <MathHeader />
       
-      <main className="flex-1 px-6 py-8 md:px-12 md:py-10 max-w-7xl mx-auto w-full">
-        <div className="flex items-center justify-between mb-8">
+      <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8 md:px-12 md:py-10 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg bg-white ${getColor(operation || '')} bg-opacity-10`}>
               {getOperationIcon()}
             </div>
-            <h1 className="heading-xl capitalize">
+            <h1 className="heading-lg sm:heading-xl capitalize">
               {operation}
             </h1>
           </div>
@@ -147,19 +147,21 @@ const Operation: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h2 className="text-2xl font-bold mb-4">Practice Complete!</h2>
-            <p className="text-lg text-muted-foreground mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Practice Complete!</h2>
+            <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
               You got {score} out of 5 problems correct!
             </p>
             <Button
               onClick={handleNextProblem}
-              className="bg-mathBlue hover:bg-mathBlue/90"
+              className="bg-mathBlue hover:bg-mathBlue/90 w-full sm:w-auto"
             >
               Try Again
             </Button>
           </motion.div>
         ) : (
-          renderOperation()
+          <div className="responsive-container">
+            {renderOperation()}
+          </div>
         )}
       </main>
     </div>
