@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import NumberLine from './Numberline';
+import NumberLine from './NumberLine';
 import CrocMouth from './CrocMouth';
 import TrainAnimation from './TrainAnimation';
 import RacingAnimals from './RacingAnimals';
