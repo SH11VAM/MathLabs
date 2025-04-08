@@ -70,16 +70,29 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
   const handleCustomProblem = () => {
     try {
-      if (editableProblem.num1 < editableProblem.num2) {
+      const maxNumber = getMaxNumber();
+      const customDifference = editableProblem.num1 - editableProblem.num2;
+
+      // Check if either number exceeds the maximum allowed
+      if (editableProblem.num1 > maxNumber || editableProblem.num2 > maxNumber) {
         toast({
-          title: "Invalid subtraction",
-          description: "First number must be greater than second number",
+          title: "Invalid Problem",
+          description: `For ${getClassHeading()}, numbers cannot exceed ${maxNumber}`,
           variant: "destructive",
         });
         return;
       }
 
-      const customDifference = editableProblem.num1 - editableProblem.num2;
+      // Check if the difference would be negative
+      if (customDifference < 0) {
+        toast({
+          title: "Invalid Problem",
+          description: "The first number must be greater than or equal to the second number",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const newProblem = {
         num1: editableProblem.num1,
         num2: editableProblem.num2,
@@ -114,11 +127,25 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
       return;
     }
 
-    // For two-digit numbers, ensure first number is greater than second
-    if (field === "num2" && numValue > editableProblem.num1) {
+    const maxNumber = getMaxNumber();
+    const otherNum = field === "num1" ? editableProblem.num2 : editableProblem.num1;
+    const potentialDifference = field === "num1" ? numValue - otherNum : otherNum - numValue;
+
+    // Check if the input number exceeds the maximum allowed for the class level
+    if (numValue > maxNumber) {
       toast({
-        title: "Invalid subtraction",
-        description: "Second number must be less than first number",
+        title: "Invalid Input",
+        description: `For ${getClassHeading()}, numbers cannot exceed ${maxNumber}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if the difference would be negative
+    if (potentialDifference < 0) {
+      toast({
+        title: "Invalid Input",
+        description: "The first number must be greater than or equal to the second number",
         variant: "destructive",
       });
       return;
@@ -127,7 +154,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     const newProblem = {
       num1: field === "num1" ? numValue : editableProblem.num1,
       num2: field === "num2" ? numValue : editableProblem.num2,
-      difference: field === "num1" ? numValue - editableProblem.num2 : editableProblem.num1 - numValue,
+      difference: potentialDifference,
     };
 
     setEditableProblem((prev) => ({
@@ -215,68 +242,106 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     return Array.from({ length: maxDigits }, (_, i) => maxDigits - 1 - i);
   };
 
+  const getMaxNumber = () => {
+    switch (level) {
+      case 1:
+        return 9; // One digit numbers (0-9)
+      case 2:
+        return 99; // Two digit numbers (0-99)
+      case 3:
+        return 499; // Three digit numbers (0-499)
+      default:
+        return 499;
+    }
+  };
+
+  const getClassHeading = () => {
+    switch (level) {
+      case 1:
+        return "One-Digit Subtraction";
+      case 2:
+        return "Two-Digit Subtraction";
+      case 3:
+        return "Three-Digit Subtraction";
+      default:
+        return "Subtraction";
+    }
+  };
+
   // Determine steps based on problem
   const steps = [
     {
-      instruction: "Let's subtract these numbers digit by digit",
-      voice:
-        "Let's subtract these numbers digit by digit, starting from the right side.",
+      instruction: level === 1 ? "Let's subtract these numbers" : "Let's subtract these numbers digit by digit",
+      voice: level === 1 ? "Let's subtract these numbers." : "Let's subtract these numbers digit by digit, starting from the right side.",
     },
-    ...(borrowedPlaces.includes(0)
+    ...(level === 1
       ? [
           {
-            instruction: "Borrow 1 from the tens place",
-            voice: `We need to borrow 1 from the tens place because ${getDigit(
-              problem.num1,
+            instruction: "Subtract the numbers",
+            voice: `Subtract ${problem.num1} minus ${problem.num2} equals ${problem.difference}.`,
+          },
+        ]
+      : [
+          ...(borrowedPlaces.includes(0)
+            ? [
+                {
+                  instruction: "Borrow 1 from the tens place",
+                  voice: `We need to borrow 1 from the tens place because ${getDigit(
+                    problem.num1,
+                    0
+                  )} is less than ${getDigit(problem.num2, 0)}.`,
+                },
+              ]
+            : []),
+          {
+            instruction: "Subtract the ones place",
+            voice: `Subtract the ones place: ${
+              borrowedPlaces.includes(0)
+                ? getDigit(problem.num1, 0) + 10
+                : getDigit(problem.num1, 0)
+            } minus ${getDigit(problem.num2, 0)} equals ${getDigit(
+              problem.difference,
               0
-            )} is less than ${getDigit(problem.num2, 0)}.`,
+            )}.`,
           },
-        ]
-      : []),
-    {
-      instruction: "Subtract the ones place",
-      voice: `Subtract the ones place: ${
-        borrowedPlaces.includes(0)
-          ? getDigit(problem.num1, 0) + 10
-          : getDigit(problem.num1, 0)
-      } minus ${getDigit(problem.num2, 0)} equals ${getDigit(
-        problem.difference,
-        0
-      )}.`,
-    },
-    ...(borrowedPlaces.includes(1)
-      ? [
+          ...(borrowedPlaces.includes(1)
+            ? [
+                {
+                  instruction: "Borrow 1 from the hundreds place",
+                  voice: `We need to borrow 1 from the hundreds place because ${
+                    getDigit(problem.num1, 1) - (borrowedPlaces.includes(0) ? 1 : 0)
+                  } is less than ${getDigit(problem.num2, 1)}.`,
+                },
+              ]
+            : []),
           {
-            instruction: "Borrow 1 from the hundreds place",
-            voice: `We need to borrow 1 from the hundreds place because ${
-              getDigit(problem.num1, 1) - (borrowedPlaces.includes(0) ? 1 : 0)
-            } is less than ${getDigit(problem.num2, 1)}.`,
+            instruction: "Subtract the tens place",
+            voice: `Subtract the tens place: ${
+              borrowedPlaces.includes(1)
+                ? getDigit(problem.num1, 1) + 10 - (borrowedPlaces.includes(0) ? 1 : 0)
+                : getDigit(problem.num1, 1) - (borrowedPlaces.includes(0) ? 1 : 0)
+            } minus ${getDigit(problem.num2, 1)} equals ${getDigit(
+              problem.difference,
+              1
+            )}.`,
           },
-        ]
-      : []),
+          ...(level === 3
+            ? [
+                {
+                  instruction: "Subtract the hundreds place",
+                  voice: `Subtract the hundreds place: ${
+                    getDigit(problem.num1, 2) - (borrowedPlaces.includes(1) ? 1 : 0)
+                  } minus ${getDigit(problem.num2, 2)} equals ${getDigit(
+                    problem.difference,
+                    2
+                  )}.`,
+                },
+              ]
+            : []),
+        ]),
     {
-      instruction: "Subtract the tens place",
-      voice: `Subtract the tens place: ${
-        borrowedPlaces.includes(1)
-          ? getDigit(problem.num1, 1) + 10 - (borrowedPlaces.includes(0) ? 1 : 0)
-          : getDigit(problem.num1, 1) - (borrowedPlaces.includes(0) ? 1 : 0)
-      } minus ${getDigit(problem.num2, 1)} equals ${getDigit(
-        problem.difference,
-        1
-      )}.`,
-    },
-    {
-      instruction: "Subtract the hundreds place",
-      voice: `Subtract the hundreds place: ${
-        getDigit(problem.num1, 2) - (borrowedPlaces.includes(1) ? 1 : 0)
-      } minus ${getDigit(problem.num2, 2)} equals ${getDigit(
-        problem.difference,
-        2
-      )}.`,
-    },
-    {
-      instruction: "Find the final difference",
-      voice: `The final difference is ${problem.difference}.`,
+      instruction: "Great job!",
+      voice: `Great job! ${problem.num1} minus ${problem.num2} equals ${problem.difference}.`,
     },
   ];
 
@@ -316,6 +381,24 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     return null;
   };
 
+  const generateOneDigitSubtraction = () => {
+    const first = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const second = Math.floor(Math.random() * first) + 1; // 1 to first number
+    return { num1: first, num2: second, difference: first - second };
+  };
+
+  const generateTwoDigitSubtraction = () => {
+    const first = Math.floor(Math.random() * 90) + 10; // 10 to 99
+    const second = Math.floor(Math.random() * first) + 1; // 1 to first number
+    return { num1: first, num2: second, difference: first - second };
+  };
+
+  const generateThreeDigitSubtraction = () => {
+    const first = Math.floor(Math.random() * 400) + 100; // 100 to 499
+    const second = Math.floor(Math.random() * first) + 1; // 1 to first number
+    return { num1: first, num2: second, difference: first - second };
+  };
+
   return (
     <div className="flex flex-col items-center p-4">
       <div className="flex justify-end w-full mb-4">
@@ -329,7 +412,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         </Button>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-4 w-full max-w-md">
+      <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-muted-foreground">
             First Number
@@ -339,7 +422,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
             className="border rounded-md px-3 py-2 text-center text-lg"
-            placeholder="Enter first number"
+            placeholder="first number"
             min="0"
             max="999"
           />
@@ -353,11 +436,25 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
             className="border rounded-md px-3 py-2 text-center text-lg"
-            placeholder="Enter second number"
+            placeholder="second number"
             min="0"
             max="999"
           />
         </div>
+<div className="flex justify-center items-center mt-7 ml-9">
+{!isCustomProblem && (
+        <div className="mb-4">
+          <Button
+            variant="outline"
+            onClick={handleCustomProblem}
+            className="bg-mathPink bg-opacity-10 text-mathPink hover:bg-mathPink hover:text-white"
+          >
+            Edit
+          </Button>
+        </div>
+      )}
+</div>
+
       </div>
 
       <div className="mb-8 text-center">
@@ -443,17 +540,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         </div>
       </div>
 
-      {!isCustomProblem && (
-        <div className="mb-4">
-          <Button
-            variant="outline"
-            onClick={handleCustomProblem}
-            className="bg-mathPink bg-opacity-10 text-mathPink hover:bg-mathPink hover:text-white"
-          >
-            Create Custom Problem
-          </Button>
-        </div>
-      )}
+     
 
       <div className="flex flex-col items-center gap-4">
         {completed ? (

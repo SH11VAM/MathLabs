@@ -17,6 +17,7 @@ interface SidebarProps {
   selectedClass?: string;
   selectedOperation?: string;
   onClose?: () => void;
+ 
 }
 
 const classOperations: ClassOperations = {
@@ -97,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedClass, selectedOperation, onC
   };
 
   return (
-    <div className="w-[280px] sm:w-64 h-screen overflow-y-auto bg-white shadow-lg scroll-smooth scrollbar fixed md:static inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out">
+    <div className="w-[280px] sm:w-64 h-screen overflow-y-auto bg-white shadow-lg scroll-smooth scrollbar fixed md:static inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out ">
       {/* Mobile close button */}
       <div className="md:hidden flex justify-end p-4">
         <Button
@@ -119,13 +120,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedClass, selectedOperation, onC
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <img
-            src="/YoungLabsLogofan.png"
+            src="/mathlogo.png"
             alt="YoungLabs Logo"
             width={40}
             height={40}
-            className="animate-[spin_1.5s_linear_infinite]"
+           
           />
-          <h2 className="text-lg sm:text-xl font-bold text-animate text-[#55D400]">Younglabs</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-animate text-[#55D400] bg-clip-text text-transparent bg-gradient-to-r from-mathBlue to-mathPurple">Math Adventures</h2>
         </button>
       </div>
 

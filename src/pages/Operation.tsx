@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import { Plus, Minus, Divide, X, Hash, Square, Hash as Numbers } from 'lucide-react';
-import MathHeader from '../components/MathHeader';
 import AdditionOperation from '../operations/AdditionOperation';
 import SubtractionOperation from '../operations/SubtractionOperation';
 import MultiplicationOperation from '../operations/MultiplicationOperation';
@@ -117,8 +116,8 @@ const Operation: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <MathHeader />
+    <div className="min-h-screen bg-background flex flex-col ">
+     
       
       <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8 md:px-12 md:py-10 max-w-7xl mx-auto w-full">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
@@ -126,7 +125,7 @@ const Operation: React.FC = () => {
             <div className={`p-2 rounded-lg bg-white ${getColor(operation || '')} bg-opacity-10`}>
               {getOperationIcon()}
             </div>
-            <h1 className="heading-lg sm:heading-xl capitalize">
+            <h1 className="heading-md sm:heading-lg capitalize ">
               {operation}
             </h1>
           </div>

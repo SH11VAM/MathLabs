@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowUp, Check, Volume2, VolumeX, Info, Lightbulb, Eye } from "lucide-react";
+import {
+  ArrowUp,
+  Check,
+  Volume2,
+  VolumeX,
+  Info,
+  Lightbulb,
+  Eye,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NumberBlock from "../components/NumberBlock";
@@ -30,8 +38,42 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   const [userInput, setUserInput] = useState({ num1: "", num2: "" });
   const [isMuted, setIsMuted] = useState(false);
 
+  const generateTwoDigitAddition = () => {
+    const first = Math.floor(Math.random() * 90) + 10; // 10 to 99
+    const maxSecond = Math.min(99 - first, 99);
+    const second = Math.floor(Math.random() * (maxSecond - 9)) + 10;
+    return { num1: first, num2: second, sum: first + second };
+  };
+
+  const generateOneDigitAddition = () => {
+    const first = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const maxSecond = 9 - first;
+    const second = Math.floor(Math.random() * maxSecond) + 1;
+    return { num1: first, num2: second, sum: first + second };
+  };
+
+  const generateThreeDigitAddition = () => {
+    const first = Math.floor(Math.random() * 400) + 100; // 100 to 499
+    const maxSecond = 499 - first;
+    const second = Math.floor(Math.random() * maxSecond) + 100;
+    return { num1: first, num2: second, sum: first + second };
+  };
+
   useEffect(() => {
-    const newProblem = generateAdditionProblem(level);
+    let newProblem;
+    switch (level) {
+      case 1:
+        newProblem = generateOneDigitAddition();
+        break;
+      case 2:
+        newProblem = generateTwoDigitAddition();
+        break;
+      case 3:
+        newProblem = generateThreeDigitAddition();
+        break;
+      default:
+        newProblem = generateOneDigitAddition();
+    }
     setProblem(newProblem);
     setEditableProblem({ num1: newProblem.num1, num2: newProblem.num2 });
     setCurrentStep(0);
@@ -51,7 +93,6 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   const calculateCarryValues = (a: number, b: number) => {
     const carries: number[] = [];
     let carry = 0;
-
     const aStr = a.toString();
     const bStr = b.toString();
     const maxLength = Math.max(aStr.length, bStr.length);
@@ -69,40 +110,70 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     return carries.map((c, i) => (c === 1 ? i : -1)).filter((i) => i !== -1);
   };
 
+  const getClassHeading = () => {
+    switch (level) {
+      case 1:
+        return "One-Digit Addition";
+      case 2:
+        return "Two-Digit Addition";
+      case 3:
+        return "Three-Digit Addition";
+      default:
+        return "Addition";
+    }
+  };
+
   const getMaxDigits = () => {
-    const num1 = isCustomProblem ? problem.num1 : editableProblem.num1;
-    const num2 = isCustomProblem ? problem.num2 : editableProblem.num2;
-    const sum = num1 + num2;
-
-    // For Class 1, always show single digit
-    if (level === 1) {
-      return 1;
+    switch (level) {
+      case 1:
+        return 1; // One digit for class 1
+      case 2:
+        return 2; // Two digits for class 2
+      case 3:
+        return 3; // Three digits for class 3
+      default:
+        return 3; // Default to three digits
     }
+  };
 
-    // For Class 2, show two digits
-    if (level === 2) {
-      return 2;
+  const getMaxNumber = () => {
+    switch (level) {
+      case 1:
+        return 9; // One digit numbers (0-9)
+      case 2:
+        return 49; // Two digit numbers (0-49) to ensure sum doesn't exceed 99
+      case 3:
+        return 499; // Three digit numbers (0-499) to ensure sum doesn't exceed 999
+      default:
+        return 499;
     }
+  };
 
-    // For Class 3, show three digits
-    if (level === 3) {
-      return 3;
+  const getMaxResult = () => {
+    switch (level) {
+      case 1:
+        return 9; // One digit result (0-9)
+      case 2:
+        return 99; // Two digit result (0-99)
+      case 3:
+        return 999; // Three digit result (0-999)
+      default:
+        return 999;
     }
-
-    // For other classes, show appropriate number of digits
-    return Math.max(getDigitCount(num1), getDigitCount(num2), getDigitCount(sum));
   };
 
   const steps = [
     {
-      instruction: "Let's add these numbers digit by digit",
-      voice: "Let's add these numbers digit by digit, starting from the right side.",
+      instruction: level === 1 ? "Let's add these numbers" : "Let's add these numbers digit by digit",
+      voice: level === 1 ? "Let's add these numbers together." : "Let's add these numbers digit by digit, starting from the right side.",
     },
     {
-      instruction: "Add the ones place",
-      voice: `Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(problem.num2, 0)} equals ${getDigit(problem.sum, 0)}${carryValues.includes(0) ? " with a carry of 1" : ""}.`,
+      instruction: level === 1 ? "Count the total" : "Add the ones place",
+      voice: level === 1 
+        ? `Count the total: ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`
+        : `Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(problem.num2, 0)} equals ${getDigit(problem.sum, 0)}${carryValues.includes(0) ? " with a carry of 1" : ""}.`,
     },
-    ...(carryValues.includes(0)
+    ...(level > 1 && carryValues.includes(0)
       ? [
           {
             instruction: "Carry the 1 to the tens place",
@@ -110,11 +181,17 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           },
         ]
       : []),
-    {
-      instruction: "Add the tens place",
-      voice: `Add the tens place: ${getDigit(problem.num1, 1)} plus ${getDigit(problem.num2, 1)} ${carryValues.includes(0) ? "plus the carried 1 " : ""}equals ${getDigit(problem.sum, 1)}${carryValues.includes(1) ? " with a carry of 1" : ""}.`,
-    },
-    ...(carryValues.includes(1)
+    ...(level > 1
+      ? [
+          {
+            instruction: "Add the tens place",
+            voice: `Add the tens place: ${getDigit(problem.num1, 1)} plus ${getDigit(problem.num2, 1)} ${
+              carryValues.includes(0) ? "plus the carried 1 " : ""
+            }equals ${getDigit(problem.sum, 1)}${carryValues.includes(1) ? " with a carry of 1" : ""}.`,
+          },
+        ]
+      : []),
+    ...(level > 1 && carryValues.includes(1)
       ? [
           {
             instruction: "Carry the 1 to the hundreds place",
@@ -122,19 +199,51 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           },
         ]
       : []),
+    ...(level === 3
+      ? [
+          {
+            instruction: "Add the hundreds place",
+            voice: `Add the hundreds place: ${getDigit(problem.num1, 2)} plus ${getDigit(problem.num2, 2)} ${
+              carryValues.includes(1) ? "plus the carried 1 " : ""
+            }equals ${getDigit(problem.sum, 2)}.`,
+          },
+        ]
+      : []),
     {
-      instruction: "Add the hundreds place",
-      voice: `Add the hundreds place: ${getDigit(problem.num1, 2)} plus ${getDigit(problem.num2, 2)} ${carryValues.includes(1) ? "plus the carried 1 " : ""}equals ${getDigit(problem.sum, 2)}.`,
-    },
-    {
-      instruction: "Find the total sum",
-      voice: `The total sum is ${problem.sum}.`,
+      instruction: "Great job!",
+      voice: `Great job! ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`,
     },
   ];
 
   const handleCustomProblem = () => {
     try {
+      const maxNumber = getMaxNumber();
+      const maxResult = getMaxResult();
       const customSum = editableProblem.num1 + editableProblem.num2;
+
+      // Check if either number exceeds the maximum allowed
+      if (
+        editableProblem.num1 > maxNumber ||
+        editableProblem.num2 > maxNumber
+      ) {
+        toast({
+          title: "Invalid Problem",
+          description: `For ${getClassHeading()}, numbers cannot exceed ${maxNumber}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Check if the sum would exceed the maximum allowed result
+      if (customSum > maxResult) {
+        toast({
+          title: "Invalid Problem",
+          description: `The sum cannot exceed ${maxResult} for ${getClassHeading()}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       const newProblem = {
         num1: editableProblem.num1,
         num2: editableProblem.num2,
@@ -169,13 +278,37 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       return;
     }
 
+    const maxNumber = getMaxNumber();
+    const maxResult = getMaxResult();
+    const otherNum =
+      field === "num1" ? editableProblem.num2 : editableProblem.num1;
+    const potentialSum =
+      field === "num1" ? numValue + otherNum : otherNum + numValue;
+
+    // Check if the input number exceeds the maximum allowed for the class level
+    if (numValue > maxNumber) {
+      toast({
+        title: "Invalid Input",
+        description: `For ${getClassHeading()}, numbers cannot exceed ${maxNumber}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if the sum would exceed the maximum allowed result
+    if (potentialSum > maxResult) {
+      toast({
+        title: "Invalid Input",
+        description: `The sum cannot exceed ${maxResult} for ${getClassHeading()}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newProblem = {
       num1: field === "num1" ? numValue : editableProblem.num1,
       num2: field === "num2" ? numValue : editableProblem.num2,
-      sum:
-        field === "num1"
-          ? numValue + editableProblem.num2
-          : editableProblem.num1 + numValue,
+      sum: potentialSum,
     };
 
     setEditableProblem((prev) => ({
@@ -221,7 +354,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     if (hasCarry && currentStep >= stepToShow) {
       return (
         <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
-          <div className="absolute -top-8 right-4 text-mathPink font-bold text-3xl flex items-center ">
+          <div className="absolute -top-8 right-4 text-mathPink font-bold text-3xl flex items-center mb-10 ">
             <ArrowUp className="h-4 w-4 mr-1" />
             <span className="bg-white px-1 rounded">1</span>
           </div>
@@ -241,10 +374,10 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   };
 
   const renderGeneralCase = () => (
-    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center">
-      <div className="mb-6 grid grid-cols-2 gap-4 w-full max-w-md">
+    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center ">
+      <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md ">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-muted-foreground">
+          <label className="text-sm font-extrabold text-muted-foreground">
             First Number
           </label>
           <input
@@ -252,13 +385,13 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
             className="border rounded-md px-3 py-2 text-center text-lg"
-            placeholder="Enter first number"
+            placeholder="first number"
             min="0"
             max="999"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-muted-foreground">
+          <label className="text-sm font-extrabold text-muted-foreground">
             Second Number
           </label>
           <input
@@ -266,12 +399,33 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
             className="border rounded-md px-3 py-2 text-center text-lg"
-            placeholder="Enter second number"
+            placeholder="second number"
             min="0"
             max="999"
           />
         </div>
+        <div className="ml-10 mt-7 flex flex-col gap-2">
+
+        {!isCustomProblem && (
+          <div className="mb-4 ">
+            <Button
+              variant="outline"
+              onClick={handleCustomProblem}
+              className="w-full sm:w-auto  bg-mathRed bg-opacity-10 text-mathRed hover:bg-mathRed hover:text-white border-mathRed border-2 font-bold lg:text-lg"
+            >
+              Edit
+            </Button>
+          </div>
+        )}
+        </div>
+       
       </div>
+
+      <div>  <h3 className="text-xl font-medium text-muted-foreground mb-2">
+          {currentStep < steps.length
+            ? steps[currentStep].instruction
+            : steps[steps.length - 1].instruction}
+        </h3></div>
 
       <div className="grid grid-cols-4 gap-3 mb-8">
         <div className="col-span-1"></div>
@@ -285,12 +439,12 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
                 currentStep={currentStep}
                 delay={500}
               >
-                <div className="text-mathPink font-bold text-sm flex justify-center items-center h-6">
+                <div className="text-mathPink font-bold text-3xl flex justify-center items-center h-6">
                   <ArrowUp className="h-4 w-4 mr-1" />
                   <span className="bg-white px-1 rounded">1</span>
                 </div>
               </StepAnimation>
-            ) : null
+            ) : " "
           )}
         </div>
 
@@ -348,7 +502,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         <div className="col-span-4 border-b-2 border-gray-400 my-2"></div>
 
         <div className="col-span-1"></div>
-        <div className={`col-span-3 flex ${marginClass2} ${marginClass} gap-2 `}>
+        <div
+          className={`col-span-3 flex ${marginClass2} ${marginClass} gap-2 `}
+        >
           {getPlaceValues().map((place) => (
             <StepAnimation
               key={place}
@@ -363,18 +519,6 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           ))}
         </div>
       </div>
-
-      {!isCustomProblem && (
-        <div className="mb-4">
-          <Button
-            variant="outline"
-            onClick={handleCustomProblem}
-            className="bg-mathBlue bg-opacity-10 text-mathBlue hover:bg-mathBlue hover:text-white"
-          >
-            Create Custom Problem
-          </Button>
-        </div>
-      )}
 
       <div className="flex flex-col gap-4 items-center">
         {completed ? (
@@ -409,7 +553,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         <h3 className="text-lg font-semibold mb-4">Visual Addition</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">Number 1: {problem.num1}</p>
+            <p className="text-sm text-muted-foreground">
+              Number I: {problem.num1}
+            </p>
             <div className="flex gap-2">
               {getPlaceValues().map((place) => (
                 <div key={place} className="relative">
@@ -423,7 +569,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             </div>
           </div>
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">Number 2: {problem.num2}</p>
+            <p className="text-sm text-muted-foreground">
+              Number II: {problem.num2}
+            </p>
             <div className="flex gap-2">
               {getPlaceValues().map((place) => (
                 <NumberBlock
@@ -459,7 +607,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           <div className="space-y-2">
             <h4 className="font-medium">1. Break Down Numbers</h4>
             <p className="text-sm text-muted-foreground">
-              Break down large numbers into smaller, more manageable parts. For example:
+              Break down large numbers into smaller, more manageable parts. For
+              example:
               <br />
               123 + 456 = (100 + 400) + (20 + 50) + (3 + 6) = 500 + 70 + 9 = 579
             </p>
@@ -468,8 +617,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             <h4 className="font-medium">2. Use Number Bonds</h4>
             <p className="text-sm text-muted-foreground">
               Use number bonds to make 10 or 100. For example:
-              <br />
-              7 + 8 = (7 + 3) + 5 = 10 + 5 = 15
+              <br />7 + 8 = (7 + 3) + 5 = 10 + 5 = 15
             </p>
           </div>
           <div className="space-y-2">
@@ -487,31 +635,38 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
   return (
     <div className="flex flex-col items-center p-4">
-      <div className="flex justify-end w-full mb-4">
+      <div className="flex justify-end w-full mb-2">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsMuted(!isMuted)}
           className="hover:bg-gray-100"
         >
-          {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+          {isMuted ? (
+            <VolumeX className="h-5 w-5" />
+          ) : (
+            <Volume2 className="h-5 w-5" />
+          )}
         </Button>
       </div>
 
       <div className="mb-8 text-center">
-        <h3 className="text-xl font-medium text-muted-foreground mb-2">
-          {currentStep < steps.length
-            ? steps[currentStep].instruction
-            : steps[steps.length - 1].instruction}
-        </h3>
+        <h2 className="text-3xl font-bold text-mathRed mb-4">
+          {getClassHeading()}
+        </h2>
+      
         {showHint && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-fuchsia-500 font-bold">
             {steps[currentStep]?.voice}
           </p>
         )}
       </div>
 
-      <Tabs defaultValue="general" className="w-full max-w-3xl" onValueChange={setActiveTab}>
+      <Tabs
+        defaultValue="general"
+        className="w-full max-w-3xl"
+        onValueChange={setActiveTab}
+      >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="general" className="flex items-center gap-2">
             <Info className="h-4 w-4" />
@@ -526,15 +681,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             Tips & Tricks
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="general">
-          {renderGeneralCase()}
-        </TabsContent>
-        <TabsContent value="visualize">
-          {renderVisualize()}
-        </TabsContent>
-        <TabsContent value="tips">
-          {renderTipsAndTricks()}
-        </TabsContent>
+        <TabsContent value="general">{renderGeneralCase()}</TabsContent>
+        <TabsContent value="visualize">{renderVisualize()}</TabsContent>
+        <TabsContent value="tips">{renderTipsAndTricks()}</TabsContent>
       </Tabs>
     </div>
   );

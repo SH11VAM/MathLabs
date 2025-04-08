@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotFound from "./pages/NotFound";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const queryClient = new QueryClient();
 
@@ -42,10 +43,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Sidebar with responsive behavior */}
       <div 
-        className={`fixed md:static inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
-      >
+  className={cn( "fixed md:static inset-y-0 left-0 z-50 h-full w-[280px] sm:w-64 bg-white shadow-lg transform transition-all duration-300 ease-in-out",
+    isSidebarOpen ? "translate-x-0" : "-translate-x-full"  ,"lg:translate-x-0")}
+>
         <Sidebar 
           selectedClass={selectedClass} 
           selectedOperation={operation} 
