@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Check, Volume2, VolumeX } from "lucide-react";
+import { ArrowDown, Check, Volume2, VolumeX, Info, Lightbulb, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NumberBlock from "../components/NumberBlock";
 import StepAnimation from "../components/StepAnimation";
 import { generateSubtractionProblem } from "../utils/mathProblems";
 import { toast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
+import VisualSubtract from "@/components/VisualSubtract";
 
 interface SubtractionOperationProps {
   onComplete: () => void;
@@ -27,6 +29,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   const [isCustomProblem, setIsCustomProblem] = useState(false);
   const [userInput, setUserInput] = useState({ num1: "", num2: "" });
   const [isMuted, setIsMuted] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
 
   useEffect(() => {
     const newProblem = generateSubtractionProblem(level);
@@ -399,19 +402,8 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
     return { num1: first, num2: second, difference: first - second };
   };
 
-  return (
-    <div className="flex flex-col items-center p-4">
-      <div className="flex justify-end w-full mb-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsMuted(!isMuted)}
-          className="hover:bg-gray-100"
-        >
-          {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-        </Button>
-      </div>
-
+  const renderGeneralCase = () => (
+    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-muted-foreground">
@@ -441,20 +433,19 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             max="999"
           />
         </div>
-<div className="flex justify-center items-center mt-7 ml-9">
-{!isCustomProblem && (
-        <div className="mb-4">
-          <Button
-            variant="outline"
-            onClick={handleCustomProblem}
-            className="bg-mathPink bg-opacity-10 text-mathPink hover:bg-mathPink hover:text-white"
-          >
-            Edit
-          </Button>
+        <div className="flex justify-center items-center mt-7 ml-9">
+          {!isCustomProblem && (
+            <div className="mb-4">
+              <Button
+                variant="outline"
+                onClick={handleCustomProblem}
+                className="bg-mathPink bg-opacity-10 text-mathPink hover:bg-mathPink hover:text-white"
+              >
+                Edit
+              </Button>
+            </div>
+          )}
         </div>
-      )}
-</div>
-
       </div>
 
       <div className="mb-8 text-center">
@@ -522,9 +513,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         <div className="col-span-4 border-b-2 border-gray-400 my-2"></div>
 
         <div className="col-span-1"></div>
-        <div className={`col-span-3 flex gap-3 ${marginClass2}
-        ${marginClass}`}
-        >
+        <div className={`col-span-3 flex gap-3 ${marginClass2} ${marginClass}`}>
           {getPlaceValues().map((place) => (
             <StepAnimation
               key={place}
@@ -539,8 +528,6 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
           ))}
         </div>
       </div>
-
-     
 
       <div className="flex flex-col items-center gap-4">
         {completed ? (
@@ -566,6 +553,101 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
           </div>
         )}
       </div>
+    </div>
+  );
+
+  const renderVisualize = () => (
+    <div className="space-y-6 w-full">
+      {level === 1 && <VisualSubtract firstNumber={problem.num1} secondNumber={problem.num2} />}
+    </div>
+  );
+
+  const renderTipsAndTricks = () => (
+    <div className="space-y-6">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-4">Subtraction Tips & Tricks</h3>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h4 className="font-medium">1. Counting Back</h4>
+            <p className="text-sm text-muted-foreground">
+              Start from the first number and count backwards the second number of times.
+              <br />
+              Example: 8 - 3 = Start at 8, count back 3: 7, 6, 5
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-medium">2. Using Number Bonds</h4>
+            <p className="text-sm text-muted-foreground">
+              Break down the numbers into smaller parts that are easier to subtract.
+              <br />
+              Example: 15 - 7 = (10 - 7) + 5 = 3 + 5 = 8
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-medium">3. Compensation Method</h4>
+            <p className="text-sm text-muted-foreground">
+              Adjust both numbers to make the subtraction easier.
+              <br />
+              Example: 23 - 18 = (23 + 2) - (18 + 2) = 25 - 20 = 5
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-4">
+      <div className="flex justify-end w-full mb-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMuted(!isMuted)}
+          className="hover:bg-gray-100"
+        >
+          {isMuted ? (
+            <VolumeX className="h-5 w-5" />
+          ) : (
+            <Volume2 className="h-5 w-5" />
+          )}
+        </Button>
+      </div>
+
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-bold text-mathRed mb-4">
+          {getClassHeading()}
+        </h2>
+      
+        {showHint && (
+          <p className="text-sm text-fuchsia-500 font-bold">
+            {steps[currentStep]?.voice}
+          </p>
+        )}
+      </div>
+
+      <Tabs
+        defaultValue="general"
+        className="w-full max-w-3xl"
+        onValueChange={setActiveTab}
+      >
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="general" className="flex items-center gap-2">
+            <Info className="h-4 w-4" />
+            General Case
+          </TabsTrigger>
+          <TabsTrigger value="visualize" className="flex items-center gap-2">
+            <Eye className="h-4 w-4" />
+            Visualize
+          </TabsTrigger>
+          <TabsTrigger value="tips" className="flex items-center gap-2">
+            <Lightbulb className="h-4 w-4" />
+            Tips & Tricks
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="general">{renderGeneralCase()}</TabsContent>
+        <TabsContent value="visualize">{renderVisualize()}</TabsContent>
+        <TabsContent value="tips">{renderTipsAndTricks()}</TabsContent>
+      </Tabs>
     </div>
   );
 };
