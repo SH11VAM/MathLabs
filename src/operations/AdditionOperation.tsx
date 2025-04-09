@@ -550,55 +550,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
   const renderVisualize = () => (
     <div className="space-y-6 w-full">
-
-      { level === 1 && <VisualOne/> }
-      {/* <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold mb-4">Visual Addition</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Number I: {problem.num1}
-            </p>
-            <div className="flex gap-2">
-              {getPlaceValues().map((place) => (
-                <div key={place} className="relative">
-                  <NumberBlock
-                    value={getDigit(problem.num1, place)}
-                    highlighted={true}
-                  />
-                  {renderCarryDigit(place)}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Number II: {problem.num2}
-            </p>
-            <div className="flex gap-2">
-              {getPlaceValues().map((place) => (
-                <NumberBlock
-                  key={place}
-                  value={getDigit(problem.num2, place)}
-                  highlighted={true}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="mt-4 pt-4 border-t">
-          <p className="text-sm text-muted-foreground">Sum: {problem.sum}</p>
-          <div className="flex gap-2">
-            {getPlaceValues().map((place) => (
-              <NumberBlock
-                key={place}
-                value={getDigit(problem.sum, place)}
-                color="bg-mathGreen bg-opacity-20"
-              />
-            ))}
-          </div>
-        </div>
-      </div> */}
+      {level === 1 && <VisualOne firstNumber={problem.num1} secondNumber={problem.num2} />}
     </div>
   );
 
