@@ -32,6 +32,7 @@ export default {
 				'rotate-bounce': 'rotate-bounce 2s ease-in-out infinite',
 				'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
 				'star-spin': 'star-spin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+				'bounce-gentle': 'bounce-gentle 4s ease-in-out infinite',
 
 				
 				'pulse-highlight': 'pulse-highlight 1.5s ease-in-out infinite',
@@ -50,6 +51,11 @@ export default {
 						"background-size": "200% 200%",
 						"background-position": "right center",
 					},
+					
+				},
+				'bounce-gentle': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-15px)' }
 				},
 
 				'accordion-down': {
@@ -151,6 +157,10 @@ export default {
 				"magic-green": "#5AE09A",
 				"magic-orange": "#FEC6A1",
 				"magic-red": "#ea384c",
+				'apple-red': '#FF5252',
+				'grass-green': '#7ED957',
+				'sky-blue': '#87CEFA',
+				'cloud-white': '#F9F9F9',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

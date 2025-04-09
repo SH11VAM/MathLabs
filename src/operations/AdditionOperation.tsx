@@ -16,6 +16,7 @@ import StepAnimation from "../components/StepAnimation";
 import { generateAdditionProblem } from "../utils/mathProblems";
 import { toast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
+import VisualOne from "@/components/VisualOne";
 
 interface AdditionOperationProps {
   onComplete: () => void;
@@ -548,8 +549,10 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   );
 
   const renderVisualize = () => (
-    <div className="space-y-6">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="space-y-6 w-full">
+
+      { level === 1 && <VisualOne/> }
+      {/* <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold mb-4">Visual Addition</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -595,7 +598,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 
@@ -682,7 +685,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="general">{renderGeneralCase()}</TabsContent>
-        <TabsContent value="visualize">{renderVisualize()}</TabsContent>
+        <TabsContent value="visualize" >{renderVisualize()}</TabsContent>
         <TabsContent value="tips">{renderTipsAndTricks()}</TabsContent>
       </Tabs>
     </div>
