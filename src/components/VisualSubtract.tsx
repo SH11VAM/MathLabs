@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Apple } from "../components/addVisual1/Apple";
 import { Bunny } from "../components/addVisual1/Bunny";
 import { Cloud } from "../components/addVisual1/Cloud";
 import { Butterfly } from "@/components/addVisual1/Butterfly";
@@ -60,7 +59,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
   return (
     <div className="relative min-h-screen overflow-hidden bg-sky-blue">
       {/* Sun */}
-      <div className="absolute top-8 right-12 w-24 h-24 bg-yellow-300 rounded-full shadow-lg animate-pulse">
+      <div className="absolute lg:top-8 top-3 right-6 lg:right-12 lg:w-24 lg:h-24 bg-yellow-300 rounded-full shadow-lg animate-pulse">
         {/* Sun rays */}
         {[...Array(8)].map((_, i) => (
           <div
@@ -84,9 +83,9 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
         size="md"
       />
       {/* Butterflies */}
-      <Butterfly className="absolute top-32 left-40" color="#9B59B6" />
-      <Butterfly className="absolute top-32 left-56" color="#E74C3C" />
-      <Butterfly className="absolute top-5 left-80" color="#3498DB" />
+      <Butterfly className="absolute top-16 left-20 lg:top-32 lg:left-40" color="#9B59B6" />
+      <Butterfly className="absolute top-16 left-28 lg:top-32 lg:left-56" color="#E74C3C" />
+      <Butterfly className="absolute top-2 left-40 lg:top-5 lg:left-80" color="#3498DB" />
       {/* Main content - centered subtraction problem */}
       <div className="relative pt-32 pb-16 px-4 max-w-4xl mx-auto">
         <div className="bg-white/70 rounded-3xl shadow-xl p-6 md:p-20">
@@ -113,7 +112,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
                     <BubbleNumber
                       number={firstNumber}
                       color="#3498DB"
-                      className="text-xl md:text-2xl"
+                      className="text-xl md:text-2xl mt-11 lg:mt-0"
                       onClick={() => startEditing("first")}
                       glow={true}
                     />
@@ -150,7 +149,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
                       number={secondNumber}
                       color="#2ECC71"
                       onClick={() => startEditing("second")}
-                      className="text-xl md:text-2xl"
+                      className="text-xl md:text-2xl mt-20 lg:mt-0"
                       glow={true}
                     />
                   )}
@@ -174,7 +173,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
                   <BubbleNumber
                     number={result}
                     color="#E74C3C"
-                    className="text-xl md:text-2xl"
+                    className="text-xl md:text-2xl mt-20 lg:mt-0"
                     glow={true}
                   />
                 </div>
@@ -182,7 +181,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
             </div>
 
             {/* Bunny character */}
-            <div className="absolute bottom-80 right-44">
+            <div className="absolute lg:bottom-80 lg:right-44 bottom-64 right-24">
               <Bunny />
             </div>
           </div>
