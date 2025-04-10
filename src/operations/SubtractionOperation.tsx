@@ -45,7 +45,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   }, [level]);
 
 
-  const marginClass = level === 1 ? "mr-44" : level === 2 ? "mr-24" : "mr-0";
+  const marginClass = level === 1 ? "lg:mr-44 mr-24" : level === 2 ? "lg:mr-24 mr-10 " : "mr-0";
   const marginClass2 = level === 1 ? "justify-self-center" : "justify-self-end";
 
   const calculateBorrowedPlaces = (a: number, b: number) => {
@@ -195,7 +195,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
     if (borrowedPlaces.includes(place) && currentStep >= (place === 0 ? 1 : 3)) {
       return (
-        <div className="absolute -top-10 ml-6 right-0 text-2xl text-mathGreen line-through">
+        <div className="absolute -top-10 ml-6 right-0 lg:text-2xl text-lg text-mathGreen line-through">
           {digit}
         </div>
       );
@@ -203,7 +203,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
     if (place > 0 && borrowedPlaces.includes(place - 1) && currentStep >= (place === 1 ? 2 : 4)) {
       return (
-        <div className="absolute -top-10 right-5 text-2xl text-mathGreen line-through">
+        <div className="absolute -top-10 right-5 lg:text-2xl text-lg text-mathGreen line-through">
           {digit}
         </div>
       );
@@ -375,7 +375,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
       return (
         <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
-          <div className="absolute -top-10 right-10 text-mathPink font-bold text-2xl flex items-center">
+          <div className="absolute -top-10 right-5 text-mathPink font-bold lg:text-2xl text-lg flex items-center">
             <ArrowDown className="h-4 w-4 mr-1" />1
           </div>
         </StepAnimation>
@@ -385,7 +385,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   };
 
   const generateOneDigitSubtraction = () => {
-    const first = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const first = Math.floor(Math.random() * 8) + 1; // 1 to 9
     const second = Math.floor(Math.random() * first) + 1; // 1 to first number
     return { num1: first, num2: second, difference: first - second };
   };
@@ -427,13 +427,13 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border rounded-md px-3 py-2 text-center text-lg"
+            className="border rounded-md px-3 py-2 text-center text-lg "
             placeholder="second number"
             min="0"
             max="999"
           />
         </div>
-        <div className="flex justify-center items-center mt-7 ml-9">
+        <div className="flex justify-center items-center lg:mt-7 lg:ml-9 ">
           {!isCustomProblem && (
             <div className="mb-4">
               <Button
@@ -631,16 +631,16 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         onValueChange={setActiveTab}
       >
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="general" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
+          <TabsTrigger value="general" className="flex items-center gap-2 text-xs lg:text-sm px-4">
+            <Info className="h-4 w-4 hidden lg:block" />
             General Case
           </TabsTrigger>
-          <TabsTrigger value="visualize" className="flex items-center gap-2">
-            <Eye className="h-4 w-4" />
+          <TabsTrigger value="visualize" className="flex items-center gap-2 text-xs lg:text-sm">
+            <Eye className="h-4 w-4 hidden lg:block" />
             Visualize
           </TabsTrigger>
-          <TabsTrigger value="tips" className="flex items-center gap-2">
-            <Lightbulb className="h-4 w-4" />
+          <TabsTrigger value="tips" className="flex items-center gap-2 text-xs lg:text-sm">
+            <Lightbulb className="h-4 w-4 hidden lg:block" />
             Tips & Tricks
           </TabsTrigger>
         </TabsList>

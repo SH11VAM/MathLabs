@@ -47,7 +47,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   };
 
   const generateOneDigitAddition = () => {
-    const first = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const first = Math.floor(Math.random() * 8) + 1; // 1 to 9
     const maxSecond = 9 - first;
     const second = Math.floor(Math.random() * maxSecond) + 1;
     return { num1: first, num2: second, sum: first + second };
@@ -84,8 +84,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     setIsCustomProblem(false);
   }, [level]);
 
-  const marginClass = level === 1 ? "lg:mr-44 mr-24" : level === 2 ? "mr-24" : "mr-0";
-  const marginClass2 = level === 1 ? "justify-self-center" : "justify-self-end";
+  const marginClass = level === 1 ? "lg:mr-44 mr-24" : level === 2 ? "lg:mr-24 mr-10" : "mr-0";
+  const marginClass2 = level === 1 ? "justify-self-center" : " justify-self-end";
 
   const getDigit = (number: number, place: number) => {
     return Math.floor((number / Math.pow(10, place)) % 10);
