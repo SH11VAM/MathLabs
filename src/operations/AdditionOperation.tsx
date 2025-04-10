@@ -84,7 +84,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     setIsCustomProblem(false);
   }, [level]);
 
-  const marginClass = level === 1 ? "mr-44" : level === 2 ? "mr-24" : "mr-0";
+  const marginClass = level === 1 ? "lg:mr-44 mr-24" : level === 2 ? "mr-24" : "mr-0";
   const marginClass2 = level === 1 ? "justify-self-center" : "justify-self-end";
 
   const getDigit = (number: number, place: number) => {
@@ -165,14 +165,26 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
   const steps = [
     {
-      instruction: level === 1 ? "Let's add these numbers" : "Let's add these numbers digit by digit",
-      voice: level === 1 ? "Let's add these numbers together." : "Let's add these numbers digit by digit, starting from the right side.",
+      instruction:
+        level === 1
+          ? "Let's add these numbers"
+          : "Let's add these numbers digit by digit",
+      voice:
+        level === 1
+          ? "Let's add these numbers together."
+          : "Let's add these numbers digit by digit, starting from the right side.",
     },
     {
       instruction: level === 1 ? "Count the total" : "Add the ones place",
-      voice: level === 1 
-        ? `Count the total: ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`
-        : `Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(problem.num2, 0)} equals ${getDigit(problem.sum, 0)}${carryValues.includes(0) ? " with a carry of 1" : ""}.`,
+      voice:
+        level === 1
+          ? `Count the total: ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`
+          : `Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(
+              problem.num2,
+              0
+            )} equals ${getDigit(problem.sum, 0)}${
+              carryValues.includes(0) ? " with a carry of 1" : ""
+            }.`,
     },
     ...(level > 1 && carryValues.includes(0)
       ? [
@@ -186,9 +198,14 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       ? [
           {
             instruction: "Add the tens place",
-            voice: `Add the tens place: ${getDigit(problem.num1, 1)} plus ${getDigit(problem.num2, 1)} ${
+            voice: `Add the tens place: ${getDigit(
+              problem.num1,
+              1
+            )} plus ${getDigit(problem.num2, 1)} ${
               carryValues.includes(0) ? "plus the carried 1 " : ""
-            }equals ${getDigit(problem.sum, 1)}${carryValues.includes(1) ? " with a carry of 1" : ""}.`,
+            }equals ${getDigit(problem.sum, 1)}${
+              carryValues.includes(1) ? " with a carry of 1" : ""
+            }.`,
           },
         ]
       : []),
@@ -204,7 +221,10 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       ? [
           {
             instruction: "Add the hundreds place",
-            voice: `Add the hundreds place: ${getDigit(problem.num1, 2)} plus ${getDigit(problem.num2, 2)} ${
+            voice: `Add the hundreds place: ${getDigit(
+              problem.num1,
+              2
+            )} plus ${getDigit(problem.num2, 2)} ${
               carryValues.includes(1) ? "plus the carried 1 " : ""
             }equals ${getDigit(problem.sum, 2)}.`,
           },
@@ -355,7 +375,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     if (hasCarry && currentStep >= stepToShow) {
       return (
         <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
-          <div className="absolute -top-8 right-4 text-mathPink font-bold text-3xl flex items-center mb-10 ">
+          <div className="absolute -top-8 right-4 text-mathPink font-bold text-3xl flex items-center mb-10  ">
             <ArrowUp className="h-4 w-4 mr-1" />
             <span className="bg-white px-1 rounded">1</span>
           </div>
@@ -378,55 +398,56 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center ">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md ">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-extrabold text-muted-foreground">
+          <label className="lg:text-sm text-[12px] font-extrabold text-muted-foreground">
             First Number
           </label>
           <input
             type="number"
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
-            className="border rounded-md px-3 py-2 text-center text-lg"
+            className="border rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm"
             placeholder="first number"
             min="0"
             max="999"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-extrabold text-muted-foreground">
+          <label className="lg:text-sm text-[12px] font-extrabold text-muted-foreground">
             Second Number
           </label>
           <input
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border rounded-md px-3 py-2 text-center text-lg"
+            className="border rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm"
             placeholder="second number"
             min="0"
             max="999"
           />
         </div>
-        <div className="ml-10 mt-7 flex flex-col gap-2">
-
-        {!isCustomProblem && (
-          <div className="mb-4 ">
-            <Button
-              variant="outline"
-              onClick={handleCustomProblem}
-              className="w-full sm:w-auto  bg-mathRed bg-opacity-10 text-mathRed hover:bg-mathRed hover:text-white border-mathRed border-2 font-bold lg:text-lg"
-            >
-              Edit
-            </Button>
-          </div>
-        )}
+        <div className="lg:ml-10 mr-10 mt-7 flex flex-col gap-2">
+          {!isCustomProblem && (
+            <div className="mb-4  ">
+              <Button
+                variant="outline"
+                onClick={handleCustomProblem}
+                className="w-full bg-mathRed bg-opacity-10 text-mathRed hover:bg-mathRed hover:text-white border-mathRed border-2 font-bold text-sm  lg:text-lg rounded-sm"
+              >
+                Edit
+              </Button>
+            </div>
+          )}
         </div>
-       
       </div>
 
-      <div>  <h3 className="text-xl font-medium text-muted-foreground mb-2">
+      <div>
+        {" "}
+        <h3 className="lg:text-xl text-sm font-medium text-cyan-500 mb-2">
           {currentStep < steps.length
             ? steps[currentStep].instruction
             : steps[steps.length - 1].instruction}
-        </h3></div>
+        </h3>
+      </div>
 
       <div className="grid grid-cols-4 gap-3 mb-8">
         <div className="col-span-1"></div>
@@ -445,7 +466,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
                   <span className="bg-white px-1 rounded">1</span>
                 </div>
               </StepAnimation>
-            ) : " "
+            ) : (
+              " "
+            )
           )}
         </div>
 
@@ -550,7 +573,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
   const renderVisualize = () => (
     <div className="space-y-6 w-full">
-      {level === 1 && <VisualOne firstNumber={problem.num1} secondNumber={problem.num2} />}
+      {level === 1 && (
+        <VisualOne firstNumber={problem.num1} secondNumber={problem.num2} />
+      )}
     </div>
   );
 
@@ -609,7 +634,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         <h2 className="text-3xl font-bold text-mathRed mb-4">
           {getClassHeading()}
         </h2>
-      
+
         {showHint && (
           <p className="text-sm text-fuchsia-500 font-bold">
             {steps[currentStep]?.voice}
@@ -619,25 +644,34 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
       <Tabs
         defaultValue="general"
-        className="w-full max-w-3xl"
+        className="w-full max-w-3xl "
         onValueChange={setActiveTab}
       >
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="general" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
+        <TabsList className="grid w-full grid-cols-3 px-2">
+          <TabsTrigger
+            value="general"
+            className="flex items-center gap-2 text-xs lg:text-sm px-4"
+          >
+            <Info className="h-4 w-4 hidden lg:block" />
             General Case
           </TabsTrigger>
-          <TabsTrigger value="visualize" className="flex items-center gap-2">
-            <Eye className="h-4 w-4" />
+          <TabsTrigger
+            value="visualize"
+            className="flex items-center gap-2 text-xs lg:text-sm"
+          >
+            <Eye className="h-4 w-4 hidden lg:block" />
             Visualize
           </TabsTrigger>
-          <TabsTrigger value="tips" className="flex items-center gap-2">
-            <Lightbulb className="h-4 w-4" />
+          <TabsTrigger
+            value="tips"
+            className="flex items-center gap-2 text-xs lg:text-sm"
+          >
+            <Lightbulb className="h-4 w-4 hidden lg:block" />
             Tips & Tricks
           </TabsTrigger>
         </TabsList>
         <TabsContent value="general">{renderGeneralCase()}</TabsContent>
-        <TabsContent value="visualize" >{renderVisualize()}</TabsContent>
+        <TabsContent value="visualize">{renderVisualize()}</TabsContent>
         <TabsContent value="tips">{renderTipsAndTricks()}</TabsContent>
       </Tabs>
     </div>

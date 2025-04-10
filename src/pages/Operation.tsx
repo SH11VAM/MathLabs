@@ -68,11 +68,11 @@ const Operation: React.FC = () => {
   const getColor = (operation: string) => {
     switch (operation) {
       case 'addition':
-        return 'bg-mathBlue';
+        return 'bg-blue-900';
       case 'subtraction':
-        return 'bg-mathGreen';
+        return 'bg-lime-900';
       case 'multiplication':
-        return 'bg-mathPurple';
+        return 'bg-purple-900';
       case 'division':
         return 'bg-mathOrange';
       case 'factorial':
@@ -121,7 +121,7 @@ const Operation: React.FC = () => {
       
       <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8 md:px-12 md:py-10 max-w-7xl mx-auto w-full">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center lg:justify-normal gap-3">
             <div className={`p-2 rounded-lg bg-white ${getColor(operation || '')} bg-opacity-10`}>
               {getOperationIcon()}
             </div>
@@ -130,7 +130,7 @@ const Operation: React.FC = () => {
             </h1>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center lg:justify-normal gap-4">
             <div className="text-sm text-muted-foreground">
               Problem {problemNumber}/5
             </div>

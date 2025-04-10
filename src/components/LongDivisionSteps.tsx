@@ -124,7 +124,7 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3, duration: 0.3 }}
                       >
-                        {-step.multiply}
+                        {step.currentDividend}
                       </motion.div>
                     )}
                     
@@ -146,7 +146,7 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                       ></motion.div>
                     )}
                     
-                    {/* Subtraction result */}
+                    {/* Vertical subtraction */}
                     {step.subtract !== undefined && (
                       <motion.div 
                         className={cn(
@@ -161,7 +161,11 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.3 }}
                       >
-                        {step.subtract}
+                        <div className="flex flex-col items-end">
+                        <div>{step.currentDividend}</div>
+                          <div className="text-red-600">-{step.multiply}</div>
+                          <div className="border-t border-black w-full text-center">{step.subtract}</div>
+                        </div>
                       </motion.div>
                     )}
                     
