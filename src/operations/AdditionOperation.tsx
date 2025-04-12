@@ -375,7 +375,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     if (hasCarry && currentStep >= stepToShow) {
       return (
         <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
-          <div className="absolute -top-8 right-4 text-mathPink font-bold text-3xl flex items-center mb-10  ">
+          <div className="absolute -top-8 right-4 text-mathPink font-bold lg:text-3xl text-lg flex items-center mb-10  ">
             <ArrowUp className="h-4 w-4 mr-1" />
             <span className="bg-white px-1 rounded">1</span>
           </div>
@@ -461,7 +461,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
                 currentStep={currentStep}
                 delay={500}
               >
-                <div className="text-mathPink font-bold text-3xl flex justify-center items-center h-6">
+                <div className="text-mathPink font-bold lg:text-3xl text-lg flex justify-center items-center h-6">
                   <ArrowUp className="h-4 w-4 mr-1" />
                   <span className="bg-white px-1 rounded">1</span>
                 </div>

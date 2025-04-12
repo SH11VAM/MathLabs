@@ -35,7 +35,7 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
   
   // Helper function to calculate character position
   const getCharPosition = (position: number) => {
-    return `${position * 1.5}ch`;
+    return `${position * 1.65}ch`;
   };
 
   return (
@@ -110,7 +110,7 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                 return (
                   <div key={idx} className="relative">
                     {/* Multiplication result under the dividend */}
-                    {step.multiply !== undefined && (
+                    {/* {step.multiply !== undefined && (
                       <motion.div 
                         className={cn(
                           "absolute whitespace-nowrap",
@@ -126,10 +126,10 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                       >
                         {step.currentDividend}
                       </motion.div>
-                    )}
+                    )} */}
                     
                     {/* Horizontal line after multiplication */}
-                    {step.multiply !== undefined && (
+                    {/* {step.multiply !== undefined && (
                       <motion.div 
                         className={cn(
                           "absolute border-t border-black",
@@ -144,27 +144,30 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 0.4, duration: 0.3 }}
                       ></motion.div>
-                    )}
+                    )} */}
                     
                     {/* Vertical subtraction */}
                     {step.subtract !== undefined && (
                       <motion.div 
                         className={cn(
                           "absolute whitespace-nowrap",
-                          {"font-bold text-blue-600": step.step === lastStep.step && step.type !== 'final'}
+                          {"font-bold text-cyan-500": step.step === lastStep.step && step.type !== 'final'}
                         )}
                         style={{ 
                           left: getCharPosition(startPosition),
-                          top: `${idx * 3 + 2}rem` 
+                          top: `${step.step==2?`${idx * 3 + step.step*1.3}`:`${idx * 3 + step.step*.5}`}rem` 
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.3 }}
                       >
                         <div className="flex flex-col items-end">
-                        <div>{step.currentDividend}</div>
+                       
+                        <div>{step.step == 0? "": step.currentDividend}</div>
                           <div className="text-red-600">-{step.multiply}</div>
                           <div className="border-t border-black w-full text-center">{step.subtract}</div>
+                          <div className={`w-4 h-4 ${(step.step== lastStep.step) || isFinalStep ? "hidden": "block"}`}><img src='/right-arrow.png' alt='arrow'/></div>
+                          
                         </div>
                       </motion.div>
                     )}
@@ -177,8 +180,8 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
                           {"font-bold": step.step === lastStep.step}
                         )}
                         style={{ 
-                          left: getCharPosition(startPosition + String(step.subtract || '').length),
-                          top: `${idx}rem` 
+                          left: getCharPosition(startPosition),
+                          top: `${step.step==2?`${idx*3.5}`:`${idx*2}`}rem` 
                         }}
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -197,7 +200,7 @@ const LongDivisionSteps: React.FC<LongDivisionStepsProps> = ({ steps, dividend, 
         {/* Final result display */}
         {isFinalStep && (
           <motion.div 
-            className="mt-8 p-4 bg-green-50 border-l-4 border-green-500 font-sans rounded-r-md"
+            className="mt-14 p-4 bg-green-50 border-l-4 border-green-500 font-sans rounded-r-md"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
