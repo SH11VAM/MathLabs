@@ -25,8 +25,8 @@ const classOperations: ClassOperations = {
     { name: "Addition", path: "/addition/1", icon: "➕" },
     { name: "Subtraction", path: "/subtraction/1", icon: "➖" },
     { name: "Counting", path: "/counting/1", icon: "🔢" },
-    { name: "Numbers", path: "/numbers/1", icon: "🔢" },
-    { name: "MCQ", path: "/MCQ", icon: "➕ 🔢" },
+    { name: "Numbers", path: "/numbers/1", icon: "📏" },
+    { name: "MCQ", path: "/MCQ", icon:"✏️" },
 
   ],
   "Class 2": [

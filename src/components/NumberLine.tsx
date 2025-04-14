@@ -26,10 +26,10 @@ const NumberLine: React.FC<NumberLineProps> = ({ min, max, highlightNumbers = []
     <div className="w-full my-6">
       <div className="relative flex justify-center items-end py-8" ref={lineRef}>
         {/* The number line */}
-        <div className="absolute h-4 bg-magic-purple rounded-full w-[90%] mt-4"></div>
+        <div className="absolute h-5 bg-magic-purple rounded-full w-[90%] mt-4"></div>
         
         {/* Tick marks and numbers */}
-        <div className="flex justify-between w-[90%] z-10">
+        <div className="flex justify-between w-[90%]  z-10">
           {numbers.map((num) => (
             <div 
               key={num} 
@@ -40,7 +40,7 @@ const NumberLine: React.FC<NumberLineProps> = ({ min, max, highlightNumbers = []
               }`}
             >
               <div 
-                className={`h-8 w-2 bg-magic-purple mb-2 ${
+                className={`h-8 w-2 bg-magic-purple mb-1 ${
                   highlightNumbers.includes(num) 
                     ? 'bg-magic-red' 
                     : ''

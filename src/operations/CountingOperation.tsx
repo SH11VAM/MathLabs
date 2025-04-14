@@ -170,7 +170,7 @@ const CountingOperation: React.FC<CountingOperationProps> = ({ onComplete }) => 
             >
               {showHint ? "Hide Hint" : "Show Hint"}
             </Button>
-            <Button onClick={handleNextNumber}>
+            <Button onClick={handleNextNumber} className="font-extrabold bg-sky-100 border-sky-400 border-2 text-sky-400 hover:bg-sky-400 hover:text-white">
               Next Number
             </Button>
           </div>

@@ -18,6 +18,7 @@ import { toast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
 import VisualOne from "@/components/VisualOne";
 
+
 interface AdditionOperationProps {
   onComplete: () => void;
 }
@@ -38,6 +39,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   const [isCustomProblem, setIsCustomProblem] = useState(false);
   const [userInput, setUserInput] = useState({ num1: "", num2: "" });
   const [isMuted, setIsMuted] = useState(false);
+  const [checkVoice ,setCheckVoice ]= useState("");
 
   const generateTwoDigitAddition = () => {
     const first = Math.floor(Math.random() * 90) + 10; // 10 to 99
@@ -155,7 +157,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       case 1:
         return 9; // One digit result (0-9)
       case 2:
-        return 99; // Two digit result (0-99)
+        return 98; // Two digit result (0-98)
       case 3:
         return 999; // Three digit result (0-999)
       default:
@@ -171,26 +173,33 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           : "Let's add these numbers digit by digit",
       voice:
         level === 1
-          ? "Let's add these numbers together."
-          : "Let's add these numbers digit by digit, starting from the right side.",
-    },
-    {
-      instruction: level === 1 ? "Count the total" : "Add the ones place",
-      voice:
-        level === 1
           ? `Count the total: ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`
-          : `Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(
+          : ` Add the ones place: ${getDigit(problem.num1, 0)} plus ${getDigit(
               problem.num2,
               0
             )} equals ${getDigit(problem.sum, 0)}${
               carryValues.includes(0) ? " with a carry of 1" : ""
             }.`,
     },
+    {
+      instruction: level === 1 ? "Count the total" : "Add the ones place",
+      voice:
+        level === 1
+          ?`Great job! Click on Next Question`
+          : "Tens Place ",
+    },
     ...(level > 1 && carryValues.includes(0)
       ? [
           {
             instruction: "Carry the 1 to the tens place",
-            voice: "Carry the 1 to the tens place.",
+            voice: `Add the tens place: ${getDigit(
+              problem.num1,
+              1
+            )} plus ${getDigit(problem.num2, 1)} ${
+              carryValues.includes(0) ? "plus the carried 1 " : ""
+            }equals ${getDigit(problem.sum, 1)}${
+              carryValues.includes(1) ? " with a carry of 1" : ""
+            }.`,
           },
         ]
       : []),
@@ -209,7 +218,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           },
         ]
       : []),
-    ...(level > 1 && carryValues.includes(1)
+    ...(level > 2 && carryValues.includes(1)
       ? [
           {
             instruction: "Carry the 1 to the hundreds place",
@@ -232,7 +241,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       : []),
     {
       instruction: "Great job!",
-      voice: `Great job! ${problem.num1} plus ${problem.num2} equals ${problem.sum}.`,
+      
     },
   ];
 
@@ -349,6 +358,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     if (currentStep < steps.length) {
       setCurrentStep((prevStep) => prevStep + 1);
       speakInstruction(steps[currentStep].voice);
+      setCheckVoice(steps[currentStep].voice);
 
       if (currentStep === steps.length - 1) {
         setCompleted(true);
@@ -440,9 +450,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         </div>
       </div>
 
-      <div>
+      <div className="border-2 border-mathGreen rounded-lg px-4 py-2 bg-green-100/50">
         {" "}
-        <h3 className="lg:text-xl text-sm font-medium text-cyan-500 mb-2">
+        <h3 className="lg:text-xl text-sm font-bold text-mathGreen  mb-2">
           {currentStep < steps.length
             ? steps[currentStep].instruction
             : steps[steps.length - 1].instruction}
@@ -564,7 +574,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             <Button variant="outline" onClick={() => setShowHint(!showHint)}>
               {showHint ? "Hide Hint" : "Show Hint"}
             </Button>
-            <Button onClick={handleNextStep}>Next Step</Button>
+            <Button onClick={handleNextStep} className="font-extrabold bg-sky-100 border-sky-400 border-2 text-sky-400 hover:bg-sky-400 hover:text-white">{checkVoice== "Great job! Click on Next Question"? "Next Question": "Next Step"}</Button>
           </div>
         )}
       </div>
@@ -631,7 +641,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       </div>
 
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-mathRed mb-4">
+        <h2 className="text-4xl pointer-events-none bg-gradient-to-b from-orange-500 to-yellow-400 font-bold bg-clip-text text-transparent mb-4">
           {getClassHeading()}
         </h2>
 

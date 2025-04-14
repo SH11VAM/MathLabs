@@ -111,11 +111,11 @@ const ComparisonGame: React.FC = () => {
               Question {currentQuestion + 1} of {questions.length}
             </div>
             <div className="flex justify-center items-center text-3xl font-bold gap-4">
-              <span className={`bg-magic-yellow p-2 rounded-lg ${question.num1 >= 10 ? 'text-2xl' : 'text-3xl'}`}>{question.num1}</span>
+              <span className={`bg-magic-yellow px-4 py-2 rounded-lg ${question.num1 >= 10 ? 'text-2xl' : 'text-3xl'}`}>{question.num1}</span>
               <span className="w-12 h-12 border-2 border-magic-purple rounded-lg flex items-center justify-center">
                 {selectedAnswer || '?'}
               </span>
-              <span className={`bg-magic-pink p-2 rounded-lg ${question.num2 >= 10 ? 'text-2xl' : 'text-3xl'}`}>{question.num2}</span>
+              <span className={`bg-magic-pink px-4 py-2 rounded-lg ${question.num2 >= 10 ? 'text-2xl' : 'text-3xl'}`}>{question.num2}</span>
             </div>
           </div>
           
@@ -169,19 +169,19 @@ const ComparisonGame: React.FC = () => {
             {!showResult ? (
               <>
                 <Button 
-                  className={`bg-magic-blue hover:bg-magic-blue/80 text-white text-xl h-14 w-14 rounded-full ${selectedAnswer === '<' ? 'ring-4 ring-magic-purple' : ''}`}
+                  className={`bg-magic-blue/20 border-2 border-magic-blue  text-magic-blue hover:text-white text-xl h-14 w-14 rounded-full font-extrabold ${selectedAnswer === '<' ? 'ring-4 ring-magic-purple' : ''}`}
                   onClick={() => setSelectedAnswer('<')}
                 >
                   &lt;
                 </Button>
                 <Button 
-                  className={`bg-magic-green hover:bg-magic-green/80 text-white text-xl h-14 w-14 rounded-full ${selectedAnswer === '=' ? 'ring-4 ring-magic-purple' : ''}`}
+                  className={`hover:bg-magic-green border-2 border-magic-green bg-magic-green/20 text-magic-green font-extrabold hover:text-white text-xl h-14 w-14 rounded-full ${selectedAnswer === '=' ? 'ring-4 ring-magic-purple' : ''}`}
                   onClick={() => setSelectedAnswer('=')}
                 >
                   =
                 </Button>
                 <Button 
-                  className={`bg-magic-orange hover:bg-magic-orange/80 text-white text-xl h-14 w-14 rounded-full ${selectedAnswer === '>' ? 'ring-4 ring-magic-purple' : ''}`}
+                  className={`hover:bg-magic-orange text-magic-orange border-2 border-magic-orange font-extrabold bg-magic-orange/20 hover:text-white text-xl h-14 w-14 rounded-full ${selectedAnswer === '>' ? 'ring-4 ring-magic-purple' : ''}`}
                   onClick={() => setSelectedAnswer('>')}
                 >
                   &gt;
@@ -200,7 +200,7 @@ const ComparisonGame: React.FC = () => {
           {!showResult && (
             <div className="flex justify-center my-4">
               <Button 
-                className="bg-magic-red hover:bg-magic-red/80 text-white px-6 py-2 rounded-full disabled:opacity-50"
+                className="hover:bg-magic-red border-2 border-magic-red text-magic-red font-extrabold bg-magic-red/20 hover:text-white px-6 py-2 rounded-full disabled:opacity-50"
                 onClick={checkAnswer}
                 disabled={!selectedAnswer}
               >
