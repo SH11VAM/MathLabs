@@ -308,7 +308,7 @@ const MultiplicationVisualizer: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-mathBlue mb-6">Step-by-Step Multiplication</h1>
+      <h1 className="text-4xl font-bold pointer-events-none bg-gradient-to-b from-mathBlue to-indigo-400 bg-clip-text text-transparent mb-6">Step-by-Step Multiplication</h1>
       
       {/* Input section */}
       <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 mb-8 ">

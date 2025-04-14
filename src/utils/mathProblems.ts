@@ -78,7 +78,7 @@ export const generateSubtractionProblem = (classLevel: number) => {
       break;
     case 2:
       // Two-digit subtraction with borrowing
-      num2 = Math.floor(Math.random() * 90) + 10;
+      num2 = Math.floor(Math.random() * num1) + 10;
       num1 = Math.floor(Math.random() * 90) + 10;
       
       // Ensure num1 > num2
@@ -98,8 +98,8 @@ export const generateSubtractionProblem = (classLevel: number) => {
     case 3:
     case 4:
       // Three-digit subtraction with multiple borrowing
-      num1 = Math.floor(Math.random() * 900) + 100;
-      num2 = Math.floor(Math.random() * 900) + 100;
+      num1 = Math.floor(Math.random() * 400) + 100;
+      num2 =Math.floor(Math.random() * num1) + 1;
       
       // Ensure num1 > num2
       if (num1 <= num2) {
@@ -118,8 +118,9 @@ export const generateSubtractionProblem = (classLevel: number) => {
       break;
     default:
       // Default to three-digit subtraction
-      num1 = Math.floor(Math.random() * 900) + 100;
-      num2 = Math.floor(Math.random() * 900) + 100;
+      num1 = Math.floor(Math.random() * 400) + 100;
+      num2 =Math.floor(Math.random() * num1) + 1;
+      
       if (num1 <= num2) {
         num1 = num2 + Math.floor(Math.random() * 100) + 1;
       }

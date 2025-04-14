@@ -190,11 +190,11 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   };
 
   const getDigit = (number: number, place: number) => {
-    return Math.floor((number / Math.pow(10, place)) % 10);
+    return Math.floor(Math.abs(number) / Math.pow(10, place)) % 10;
   };
-
   // Get digit with borrowing visualization
   const getDigitWithBorrowing = (number: number, place: number) => {
+    
     const digit = getDigit(number, place);
 
     if (
@@ -416,7 +416,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
       return (
         <StepAnimation step={stepToShow} currentStep={currentStep} delay={300}>
           <div className="absolute -top-10 right-5 text-mathPink font-bold lg:text-2xl text-lg flex items-center">
-            <ArrowDown className="h-4 w-4 mr-1" />1
+            <ArrowDown className="h-4 w-4 mr-1" /> 1
           </div>
         </StepAnimation>
       );
@@ -443,7 +443,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   // };
 
   const renderGeneralCase = () => (
-    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center">
+    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center border border-black">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-bold text-muted-foreground">
@@ -453,7 +453,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             type="number"
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
-            className="border rounded-md px-3 py-2 text-center text-lg placeholder:text-sm"
+            className="border rounded-md px-3 py-2 text-center text-lg placeholder:text-sm border-black focus:border-white"
             placeholder="first number"
             min="0"
             max="999"
@@ -467,7 +467,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border rounded-md px-3 py-2 text-center text-lg placeholder:text-sm "
+            className="border rounded-md px-3 py-2 text-center text-lg placeholder:text-sm border-black  focus:border-white"
             placeholder="second number"
             min="0"
             max="999"
@@ -683,15 +683,15 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
       <Tabs
         defaultValue="general"
-        className="w-full max-w-3xl"
+        className="w-full max-w-3xl "
         onValueChange={setActiveTab}
       >
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-3 border border-black">
           <TabsTrigger
             value="general"
             className="flex items-center gap-2 text-xs lg:text-sm px-4"
           >
-            <Info className="h-4 w-4 hidden lg:block" />
+            <Info className="h-4 w-4 hidden lg:bloc " />
             General Case
           </TabsTrigger>
           <TabsTrigger

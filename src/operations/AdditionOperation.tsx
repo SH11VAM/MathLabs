@@ -157,7 +157,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       case 1:
         return 9; // One digit result (0-9)
       case 2:
-        return 98; // Two digit result (0-98)
+        return 97; // Two digit result (0-98)
       case 3:
         return 999; // Three digit result (0-999)
       default:
@@ -415,7 +415,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             type="number"
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
-            className="border rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm"
+            className="border rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
             placeholder="first number"
             min="0"
             max="999"
@@ -429,7 +429,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm"
+            className="border rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
             placeholder="second number"
             min="0"
             max="999"
