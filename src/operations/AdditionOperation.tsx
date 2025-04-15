@@ -17,6 +17,7 @@ import { generateAdditionProblem } from "../utils/mathProblems";
 import { toast } from "@/hooks/use-toast";
 import { useParams } from "react-router-dom";
 import VisualOne from "@/components/VisualOne";
+import VisualTwo from "@/components/VisualTwo";
 
 
 interface AdditionOperationProps {
@@ -583,9 +584,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
   const renderVisualize = () => (
     <div className="space-y-6 w-full">
-      {level === 1 && (
+      {level === 1 ?(
         <VisualOne firstNumber={problem.num1} secondNumber={problem.num2} />
-      )}
+      ):level==2 ? (<VisualTwo firstNumber={problem.num1} secondNumber={problem.num2}/>):("")}
     </div>
   );
 

@@ -33,8 +33,12 @@ export default {
 				'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
 				'star-spin': 'star-spin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
 				'bounce-gentle': 'bounce-gentle 4s ease-in-out infinite',
+				'bounce-in': 'bounce-in 0.5s ease-out forwards',
+				'firework': 'firework 1s ease-out forwards',
+				'wave': 'wave 2s ease-in-out infinite',
+				'star': 'star-spin 3s linear infinite',
 
-				
+
 				'pulse-highlight': 'pulse-highlight 1.5s ease-in-out infinite',
 			},
 			keyframes: {
@@ -51,7 +55,7 @@ export default {
 						"background-size": "200% 200%",
 						"background-position": "right center",
 					},
-					
+
 				},
 				'bounce-gentle': {
 					'0%, 100%': { transform: 'translateY(0)' },
@@ -105,6 +109,26 @@ export default {
 					'0%': { transform: 'rotate(0deg) scale(0)' },
 					'50%': { transform: 'rotate(180deg) scale(1.2)' },
 					'100%': { transform: 'rotate(360deg) scale(1)' },
+				},
+				'star': {
+					'0%': { transform: 'rotate(0deg) scale(0.7)' },
+					'50%': { transform: 'rotate(180deg) scale(1.2)' },
+					'100%': { transform: 'rotate(360deg) scale(0.7)' },
+				},
+				'wave': {
+					'0%': { transform: 'rotate(0deg)' },
+					'25%': { transform: 'rotate(-5deg)' },
+					'75%': { transform: 'rotate(5deg)' },
+					'100%': { transform: 'rotate(0deg)' },
+				},
+				'bounce-in': {
+					'0%': { transform: 'scale(0)' },
+					'80%': { transform: 'scale(1.1)' },
+					'100%': { transform: 'scale(1)' },
+				}, 'firework': {
+					'0%': { transform: 'scale(0.3)', opacity: '0' },
+					'50%': { opacity: '1' },
+					'100%': { transform: 'scale(1.2)', opacity: '0' },
 				},
 			},
 			colors: {
@@ -161,6 +185,14 @@ export default {
 				'grass-green': '#7ED957',
 				'sky-blue': '#87CEFA',
 				'cloud-white': '#F9F9F9',
+				'kid-blue': '#4A9DFF',
+				'kid-red': '#FF6B6B',
+				'kid-yellow': '#FFD166',
+				'kid-green': '#06D6A0',
+				'kid-purple': '#9381FF',
+				'kid-chalk': '#FFFFFF',
+				'kid-chalkboard': '#2D4059',
+				'kid-classroom': '#FFE3D8',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -178,8 +210,11 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
+				marker: ['Permanent Marker', 'cursive'],
 				sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
 				display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+				comic: ['Comic Sans MS', 'Comic Sans', 'cursive'],
+				
 			},
 
 

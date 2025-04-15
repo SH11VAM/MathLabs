@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Permanent+Marker&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -50,6 +51,38 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  .place-value-block {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .place-value-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .speech-bubble {
+    position: relative;
+  }
+  
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: white;
+    border-bottom: 0;
+    margin-left: -20px;
+    bottom: -20px;
+    left: 50%;
+  }
+  
+  .chalk-text {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
 
   /* Remove outline for non-keyboard focus */
   *:focus:not(:focus-visible) {
