@@ -73,8 +73,10 @@ export const generateSubtractionProblem = (classLevel: number) => {
   switch (classLevel) {
     case 1:
       // Simple single-digit subtraction without borrowing
-      num2 = Math.floor(Math.random() * 9) + 1;
-      num1 = num2 + Math.floor(Math.random() * (9 - num2)) + 1; // Ensure num1 > num2 and result is single digit
+      
+      num2 = Math.floor(Math.random() * num1)+1;
+      num1 = Math.floor(Math.random() * 9) + 1; 
+     // Ensure num1 > num2 and result is single digit
       break;
     case 2:
       // Two-digit subtraction with borrowing

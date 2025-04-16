@@ -604,7 +604,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   );
 
   const renderVisualize = () => (
-    <div className="space-y-6 w-full">
+    <div className="lg:space-y-6 lg:w-full">
       {level === 1 && (
         <VisualSubtract
           firstNumber={problem.num1}
@@ -683,7 +683,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
 
       <Tabs
         defaultValue="general"
-        className="w-full max-w-3xl "
+        className="lg:w-full lg:max-w-4xl "
         onValueChange={setActiveTab}
       >
         <TabsList className="grid w-full grid-cols-3 border border-black">

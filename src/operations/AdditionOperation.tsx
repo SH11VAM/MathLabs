@@ -583,7 +583,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   );
 
   const renderVisualize = () => (
-    <div className="space-y-6 w-full">
+    <div className="lg:space-y-6 lg:w-full ">
       {level === 1 ?(
         <VisualOne firstNumber={problem.num1} secondNumber={problem.num2} />
       ):level==2 ? (<VisualTwo firstNumber={problem.num1} secondNumber={problem.num2}/>):("")}
@@ -655,7 +655,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
 
       <Tabs
         defaultValue="general"
-        className="w-full max-w-3xl "
+        className="lg:w-full lg:max-w-4xl"
         onValueChange={setActiveTab}
       >
         <TabsList className="grid w-full grid-cols-3 px-2">

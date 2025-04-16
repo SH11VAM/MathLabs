@@ -57,7 +57,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-sky-blue">
+    <div className="relative lg:min-h-screen overflow-hidden bg-sky-blue lg:w-full w-[42vh]">
       {/* Sun */}
       <div className="absolute lg:top-8 top-3 right-6 lg:right-12 lg:w-24 lg:h-24 bg-yellow-300 rounded-full shadow-lg animate-pulse">
         {/* Sun rays */}
@@ -93,7 +93,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
             {/* Math problem visualization */}
             <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-6 mb-8">
               {/* First group of apples */}
-              <div className="relative grid grid-cols-3 gap-2 w-36 h-64 px-2 bg-grass-green/50 rounded-xl">
+              <div className="relative grid  lg:grid-cols-3 grid-cols-5 gap-2 lg:w-36 lg:h-64 w-64 h-36 px-2 bg-grass-green/50 rounded-xl">
                 {renderMango(firstNumber, 0)}
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
                   {isEditingFirst ? (
@@ -112,7 +112,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
                     <BubbleNumber
                       number={firstNumber}
                       color="#3498DB"
-                      className="text-xl md:text-2xl mt-11 lg:mt-0"
+                      className="text-2xl md:text-4xl mt-11 lg:mt-0"
                       onClick={() => startEditing("first")}
                       glow={true}
                     />
@@ -124,12 +124,12 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
               <BubbleNumber
                 number="-"
                 color="#E67E22"
-                className="text-xl md:text-2xl"
+                className="text-2xl md:text-4xl"
                 animated={false}
               />
 
               {/* Second group of apples */}
-              <div className="relative grid grid-cols-3 gap-2 p-4 w-36 h-64 bg-grass-green/50 rounded-xl">
+              <div className="relative grid  lg:grid-cols-3 grid-cols-5 gap-2 p-4 lg:w-36 lg:h-64 w-64 h-36 bg-grass-green/50 rounded-xl">
                 {renderMango(secondNumber, 10)}
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
                   {isEditingSecond ? (
@@ -149,7 +149,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
                       number={secondNumber}
                       color="#2ECC71"
                       onClick={() => startEditing("second")}
-                      className="text-xl md:text-2xl mt-20 lg:mt-0"
+                      className="text-2xl md:text-4xl mt-20 lg:mt-0"
                       glow={true}
                     />
                   )}
@@ -160,20 +160,20 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
               <BubbleNumber
                 number="="
                 color="#9B59B6"
-                className="text-xl md:text-2xl"
+                className="text-2xl md:text-4xl"
                 animated={false}
               />
 
               {/* Result */}
-              <div className="relative p-4 w-36 h-64 bg-grass-green/50 rounded-xl">
-                <div className="grid grid-cols-3 gap-2">
+              <div className="relative p-4 lg:w-36 lg:h-64 w-64 h-36 bg-grass-green/50 rounded-xl">
+                <div className="grid  lg:grid-cols-3 grid-cols-5 gap-2 mt-3">
                   {renderMango(result, 20)}
                 </div>
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
                   <BubbleNumber
                     number={result}
                     color="#E74C3C"
-                    className="text-xl md:text-2xl mt-20 lg:mt-0"
+                    className="text-2xl md:text-4xl mt-20 lg:mt-0"
                     glow={true}
                   />
                 </div>
@@ -181,7 +181,7 @@ const VisualSubtract: React.FC<VisualSubtractProps> = ({ firstNumber, secondNumb
             </div>
 
             {/* Bunny character */}
-            <div className="absolute lg:bottom-80 lg:right-44 bottom-64 right-24">
+            <div className="absolute lg:bottom-80 lg:right-44 bottom-40 right-4">
               <Bunny />
             </div>
           </div>

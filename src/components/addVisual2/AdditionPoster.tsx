@@ -41,7 +41,7 @@ const AdditionPoster: React.FC<AdditionPosterProps> = ({
   }, [showAnswer]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="lg:w-full lg:max-w-4xl mx-auto lg:p-4 w-[40vh]">
       <div className="bg-kid-classroom rounded-3xl p-6 shadow-lg border-8 border-kid-yellow">
         <h1 className="text-center font-marker text-3xl md:text-5xl text-kid-purple mb-6">
           Place Value Addition

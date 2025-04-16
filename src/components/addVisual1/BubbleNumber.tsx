@@ -25,8 +25,8 @@ export const BubbleNumber: React.FC<BubbleNumberProps> = ({
 }) => {
   // Size classes mapping
   const sizeClasses = {
-    sm: "w-6 h-6 text-2xl",
-    md: "w-8 h-8 md:w-14 md:h-14 text-3xl md:text-5xl",
+    sm: "w-8 h-8 text-2xl",
+    md: "w-9 h-9 md:w-14 md:h-14 text-3xl md:text-5xl",
     lg: "w-10 h-10 md:w-14 md:h-14 text-4xl md:text-6xl",
     xl: "w-12 h-12 md:w-24 md:h-24 text-5xl md:text-7xl"
   };
