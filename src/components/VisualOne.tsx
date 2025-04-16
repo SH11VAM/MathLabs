@@ -97,7 +97,7 @@ const VisualOne: React.FC<VisualOneProps> = ({ firstNumber, secondNumber }) => {
             {/* Math problem visualization */}
             <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-6 mb-8  ">
               {/* First group of apples */}
-              <div className="relative grid lg:grid-cols-3 grid-cols-5 gap-2 lg:w-36 lg:h-64 w-64 h-36 px-2 bg-grass-green/50 rounded-xl">
+              <div className="relative grid lg:grid-cols-3 grid-cols-5  lg:w-36 lg:h-64 w-60 h-36 px-2 bg-grass-green/50 rounded-xl">
                 {renderApples(firstNumber, 0)}
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 ">
                   {isEditingFirst ? (
@@ -133,7 +133,7 @@ const VisualOne: React.FC<VisualOneProps> = ({ firstNumber, secondNumber }) => {
               />
 
               {/* Second group of apples */}
-              <div className="relative grid lg:grid-cols-3 grid-cols-5 gap-2 p-4 lg:w-36 lg:h-64 w-64 h-36 bg-grass-green/50 rounded-xl">
+              <div className="relative grid lg:grid-cols-3 grid-cols-5  p-4 lg:w-36 lg:h-64 w-60 h-36 bg-grass-green/50 rounded-xl">
                 {renderApples(secondNumber, 10)}
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
                   {isEditingSecond ? (
@@ -169,8 +169,8 @@ const VisualOne: React.FC<VisualOneProps> = ({ firstNumber, secondNumber }) => {
               />
 
               {/* Result */}
-              <div className="relative p-4 lg:w-36 lg:h-64 w-64 h-36 bg-grass-green/50 rounded-xl">
-                <div className="grid lg:grid-cols-3 grid-cols-5 gap-2 ">
+              <div className="relative p-4 lg:w-36 lg:h-64 w-60 h-36 bg-grass-green/50 rounded-xl">
+                <div className="grid lg:grid-cols-3 grid-cols-5  ">
                   {renderApples(result, 20)}
                 </div>
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
