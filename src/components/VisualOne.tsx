@@ -185,7 +185,7 @@ const VisualOne: React.FC<VisualOneProps> = ({ firstNumber, secondNumber }) => {
             </div>
 
             {/* Bunny character */}
-            <div className="absolute lg:bottom-80 lg:right-44 bottom-40 right-4  ">
+            <div className="absolute lg:bottom-80 lg:right-44 bottom-64 right-6  ">
               <Bunny />
             </div>
           </div>
