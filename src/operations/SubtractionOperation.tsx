@@ -194,7 +194,6 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   };
   // Get digit with borrowing visualization
   const getDigitWithBorrowing = (number: number, place: number) => {
-    
     const digit = getDigit(number, place);
 
     if (
@@ -694,13 +693,21 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
             <Info className="h-4 w-4 hidden lg:bloc " />
             General Case
           </TabsTrigger>
-          <TabsTrigger
+          {
+           level== 1 ?(<TabsTrigger
             value="visualize"
             className="flex items-center gap-2 text-xs lg:text-sm"
           >
             <Eye className="h-4 w-4 hidden lg:block" />
             Visualize
-          </TabsTrigger>
+          </TabsTrigger>) :( <TabsTrigger
+            value="blank"
+           
+          >
+            
+          </TabsTrigger>)
+          }
+
           <TabsTrigger
             value="tips"
             className="flex items-center gap-2 text-xs lg:text-sm"

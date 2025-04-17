@@ -63,6 +63,13 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     return { num1: first, num2: second, sum: first + second };
   };
 
+  const generateFourDigitAddition = ()=>{
+    const first= Math.floor(Math.random() * 8000) + 1000;
+    const second = Math.floor(Math.random()* (9000-first))+1000;
+    return { num1: first, num2: second, sum: first + second };
+
+  }
+
   useEffect(() => {
     let newProblem;
     switch (level) {
@@ -75,6 +82,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
       case 3:
         newProblem = generateThreeDigitAddition();
         break;
+        case 4:
+          newProblem = generateFourDigitAddition();
+          break;
       default:
         newProblem = generateOneDigitAddition();
     }
@@ -122,6 +132,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         return "Two-Digit Addition";
       case 3:
         return "Three-Digit Addition";
+      case 4:
+        return "Four-Digit Addition";
       default:
         return "Addition";
     }
@@ -135,6 +147,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         return 2; // Two digits for class 2
       case 3:
         return 3; // Three digits for class 3
+      case 4:
+        return 4; // Four digits for class 4
       default:
         return 3; // Default to three digits
     }
@@ -148,6 +162,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         return 49; // Two digit numbers (0-49) to ensure sum doesn't exceed 99
       case 3:
         return 499; // Three digit numbers (0-499) to ensure sum doesn't exceed 999
+      case 4:
+        return 4999; // Four digit numbers (0-4999) to ensure sum doesn't exceed 9999
       default:
         return 499;
     }
@@ -161,6 +177,8 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         return 97; // Two digit result (0-98)
       case 3:
         return 999; // Three digit result (0-999)
+      case 4:
+        return 9999; // Four digit result (0-9999)
       default:
         return 999;
     }
@@ -227,7 +245,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           },
         ]
       : []),
-    ...(level === 3
+    ...(level === 3 || level === 4
       ? [
           {
             instruction: "Add the hundreds place",
@@ -236,13 +254,35 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
               2
             )} plus ${getDigit(problem.num2, 2)} ${
               carryValues.includes(1) ? "plus the carried 1 " : ""
-            }equals ${getDigit(problem.sum, 2)}.`,
+            }equals ${getDigit(problem.sum, 2)}${
+              carryValues.includes(2) ? " with a carry of 1" : ""
+            }.`,
+          },
+        ]
+      : []),
+    ...(level === 4 && carryValues.includes(2)
+      ? [
+          {
+            instruction: "Carry the 1 to the thousands place",
+            voice: "Carry the 1 to the thousands place.",
+          },
+        ]
+      : []),
+    ...(level === 4
+      ? [
+          {
+            instruction: "Add the thousands place",
+            voice: `Add the thousands place: ${getDigit(
+              problem.num1,
+              3
+            )} plus ${getDigit(problem.num2, 3)} ${
+              carryValues.includes(2) ? "plus the carried 1 " : ""
+            }equals ${getDigit(problem.sum, 3)}.`,
           },
         ]
       : []),
     {
       instruction: "Great job!",
-      
     },
   ];
 
@@ -464,7 +504,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         <div className="col-span-1"></div>
         <div className="col-span-3 grid grid-cols-3 gap-3">
           {/* Show carry in thousands position */}
-          {carryValues.map((place) =>
+          {/* {carryValues.map((place) =>
             place === 2 && currentStep >= 4 ? (
               <StepAnimation
                 key={place}
@@ -472,7 +512,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
                 currentStep={currentStep}
                 delay={500}
               >
-                <div className="text-mathPink font-bold lg:text-3xl text-lg flex justify-center items-center h-6">
+                <div className="text-mathBlue font-bold lg:text-3xl text-lg flex justify-center items-center h-6">
                   <ArrowUp className="h-4 w-4 mr-1" />
                   <span className="bg-white px-1 rounded">1</span>
                 </div>
@@ -480,11 +520,11 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             ) : (
               " "
             )
-          )}
+          )} */}
         </div>
 
         <div className="col-span-1"></div>
-        <div className="col-span-3 grid grid-cols-3 gap-3 ">
+        <div className="col-span-3 grid grid-cols-4 gap-3 ">
           {getPlaceValues().map((place) => (
             <div key={place} className="relative">
               <NumberBlock
@@ -514,7 +554,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
           <span className="text-6xl font-medium">+</span>
         </div>
 
-        <div className="col-span-3 grid grid-cols-3 gap-3">
+        <div className="col-span-3 grid grid-cols-4 gap-3">
           {getPlaceValues().map((place) => (
             <NumberBlock
               key={place}
@@ -659,6 +699,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         onValueChange={setActiveTab}
       >
         <TabsList className="grid w-full grid-cols-3 px-2">
+          
           <TabsTrigger
             value="general"
             className="flex items-center gap-2 text-xs lg:text-sm px-4"
@@ -666,13 +707,21 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
             <Info className="h-4 w-4 hidden lg:block" />
             General Case
           </TabsTrigger>
-          <TabsTrigger
-            value="visualize"
-            className="flex items-center gap-2 text-xs lg:text-sm"
-          >
-            <Eye className="h-4 w-4 hidden lg:block" />
-            Visualize
-          </TabsTrigger>
+
+          {(level === 3 || level === 4) ? (
+  <TabsTrigger value="blank" className="pointer-events-none"></TabsTrigger>
+) : (
+  <TabsTrigger
+    value="visualize"
+    className="flex items-center gap-2 text-xs lg:text-sm"
+  >
+    <Eye className="h-4 w-4 hidden lg:block" />
+    Visualize
+  </TabsTrigger>
+)}
+          
+
+
           <TabsTrigger
             value="tips"
             className="flex items-center gap-2 text-xs lg:text-sm"

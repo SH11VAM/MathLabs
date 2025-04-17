@@ -22,40 +22,39 @@ export const generateAdditionProblem = (classLevel: number) => {
       }
       break;
     case 3:
-    case 4:
       // Three-digit addition with multiple carrying
-      // First, generate a random sum between 100 and 1999
-      const targetSum = Math.floor(Math.random() * 1900) + 100;
-      
-      // Generate first number between 100 and targetSum-100
-      num1 = Math.floor(Math.random() * (targetSum - 100)) + 100;
-      
-      // Calculate second number to get the target sum
-      num2 = targetSum - num1;
-      
-      // Ensure both numbers are three digits
-      if (num2 < 100) {
-        num2 = 100;
-        num1 = targetSum - num2;
-      }
+      num1 = Math.floor(Math.random() * 900) + 100;
+      num2 = Math.floor(Math.random() * 900) + 100;
       
       // Ensure multiple places need carrying
       if ((num1 % 10 + num2 % 10) < 10) {
-        // Adjust to force carrying in ones place
-        const onesCarry = 10 - (num1 % 10 + num2 % 10) + 1;
-        num1 = num1 - (num1 % 10) + onesCarry;
-        num2 = targetSum - num1;
+        num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1);
       }
-      
       if ((Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) < 10) {
-        // Adjust to force carrying in tens place
-        const tensCarry = 10 - (Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) + 1;
-        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + (tensCarry * 10);
-        num2 = targetSum - num1;
+        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((10 - Math.floor(num2 / 10) % 10 + 1) * 10);
+      }
+      break;
+    case 4:
+      // Four-digit addition with multiple carrying
+      num1 = Math.floor(Math.random() * 9000) + 1000;
+      num2 = Math.floor(Math.random() * (9000 - num1)) + 1000;
+      
+      // Ensure multiple places need carrying
+      if ((num1 % 10 + num2 % 10) < 10) {
+        num1 = num1 - (num1 % 10) + (10 - num2 % 10 + 1);
+      }
+      if ((Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10) < 10) {
+        num1 = num1 - (Math.floor(num1 / 10) % 10 * 10) + ((10 - Math.floor(num2 / 10) % 10 + 1) * 10);
+      }
+      if ((Math.floor(num1 / 100) % 10 + Math.floor(num2 / 100) % 10) < 10) {
+        num1 = num1 - (Math.floor(num1 / 100) % 10 * 100) + ((10 - Math.floor(num2 / 100) % 10 + 1) * 100);
+      }
+      if ((Math.floor(num1 / 1000) % 10 + Math.floor(num2 / 1000) % 10) < 10) {
+        num1 = num1 - (Math.floor(num1 / 1000) % 10 * 1000) + ((10 - Math.floor(num2 / 1000) % 10 + 1) * 1000);
       }
       break;
     default:
-      // Default to three-digit addition with possible four-digit sum
+      // Default to three-digit addition
       num1 = Math.floor(Math.random() * 900) + 100;
       num2 = Math.floor(Math.random() * 900) + 100;
   }

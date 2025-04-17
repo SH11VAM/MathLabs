@@ -12,6 +12,7 @@ import DecimalOperation from '../operations/DecimalOperation';
 import CountingOperation from '../operations/CountingOperation';
 import ShapesOperation from '../operations/ShapesOperation';
 import NumbersOperation from '../operations/NumbersOperation';
+import FractionOperation from '@/operations/FractionOperation';
 import { toast } from "@/hooks/use-toast";
 
 const Operation: React.FC = () => {
@@ -50,7 +51,7 @@ const Operation: React.FC = () => {
         return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'division':
         return <Divide className="h-5 w-5 sm:h-6 sm:w-6" />;
-      case 'factorial':
+      case 'fraction':
         return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'decimal':
         return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
@@ -75,7 +76,7 @@ const Operation: React.FC = () => {
         return 'bg-purple-900';
       case 'division':
         return 'bg-mathOrange';
-      case 'factorial':
+      case 'fraction':
         return 'bg-mathPink';
       case 'decimal':
         return 'bg-mathYellow';
@@ -100,8 +101,8 @@ const Operation: React.FC = () => {
         return <MultiplicationOperation key={problemNumber} onComplete={handleComplete} />;
       case 'division':
         return <DivisionOperation key={problemNumber} onComplete={handleComplete} />;
-      case 'factorial':
-        return <FactorialOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'fraction':
+        return <FractionOperation/>;
       case 'decimal':
         return <DecimalOperation key={problemNumber} onComplete={handleComplete} />;
       case 'counting':

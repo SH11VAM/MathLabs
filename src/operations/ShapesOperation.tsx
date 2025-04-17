@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Volume2 } from 'lucide-react';
+import { Check, Volume2, VolumeX } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
@@ -31,7 +31,7 @@ const shapes: Shape[] = [
     name: "Rectangle",
     sides: 4,
     vertices: 4,
-    image: "📏",
+    image: " ▌",
     description: "A shape with four sides and four corners, where opposite sides are equal"
   },
   {
@@ -45,7 +45,7 @@ const shapes: Shape[] = [
     name: "Pentagon",
     sides: 5,
     vertices: 5,
-    image: "⬡",
+    image: "⬟",
     description: "A shape with five sides and five corners"
   },
   {
@@ -66,6 +66,7 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
   const [showProperties, setShowProperties] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   
   const currentShape = shapes[currentShapeIndex];
   
@@ -84,6 +85,7 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
   };
   
   const speakInstruction = (text: string) => {
+    if (isMuted) return;
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.9;
@@ -99,9 +101,13 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
           variant="ghost" 
           size="icon" 
           className="rounded-full" 
-          onClick={() => speakInstruction(`This is a ${currentShape.name}. ${currentShape.description}`)}
+          onClick={() => setIsMuted(!isMuted)}
         >
-          <Volume2 className="h-5 w-5" />
+          {isMuted ? (
+            <VolumeX className="h-5 w-5" />
+          ) : (
+            <Volume2 className="h-5 w-5" />
+          )}
         </Button>
       </div>
       
@@ -121,7 +127,7 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          className="text-8xl"
+          className="text-[180px]"
         >
           {currentShape.image}
         </motion.div>

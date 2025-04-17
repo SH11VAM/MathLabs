@@ -40,9 +40,10 @@ const classOperations: ClassOperations = {
     { name: "Subtraction", path: "/subtraction/3", icon: "➖" },
     { name: "Multiplication", path: "/multiplication/3", icon: "✖️" },
     { name: "Division", path: "/division/3", icon: "➗" },
+    { name: "Fraction", path: "/fraction/3", icon: "🌗" },
   ],
   "Class 4": [
-    // { name: "Addition", path: "/addition/4", icon: "➕" },
+    { name: "Addition", path: "/addition/4", icon: "➕" },
     // { name: "Subtraction", path: "/subtraction/4", icon: "➖" },
     // { name: "Multiplication", path: "/multiplication/4", icon: "✖️" },
     // { name: "Division", path: "/division/4", icon: "➗" },

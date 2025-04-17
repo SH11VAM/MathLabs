@@ -193,6 +193,15 @@ export default {
 				'kid-chalk': '#FFFFFF',
 				'kid-chalkboard': '#2D4059',
 				'kid-classroom': '#FFE3D8',
+				kid: {
+                    red: '#FF6B6B',
+                    orange: '#FFA06B',
+                    yellow: '#FFDC6B',
+                    green: '#6BFF8C',
+                    blue: '#6BC4FF',
+                    purple: '#B56BFF',
+                    pink: '#FF6BB5',
+                },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
