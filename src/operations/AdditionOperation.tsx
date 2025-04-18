@@ -97,7 +97,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     setIsCustomProblem(false);
   }, [level]);
 
-  const marginClass = level === 1 ? "lg:mr-64 mr-24" : level === 2 ? "lg:mr-44 mr-10" : "lg:mr-24";
+  const marginClass = level === 1 ? "lg:mr-64 mr-24" : level === 2 ? "lg:mr-44 mr-10" : level==3? "lg:mr-24": "mr-0";
   const marginClass2 = level === 1 ? "justify-self-center" : " justify-self-end";
 
   const getDigit = (number: number, place: number) => {
@@ -449,28 +449,28 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center ">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md ">
         <div className="flex flex-col gap-2">
-          <label className="lg:text-sm text-[12px] font-extrabold text-muted-foreground">
-            First Number
+          <label className="lg:text-[12px] text-[10px] font-extrabold text-muted-foreground">
+            First Line Digits
           </label>
           <input
             type="number"
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
-            className="border rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
+            className="border-2 rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
             placeholder="first number"
             min="0"
             max="999"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="lg:text-sm text-[12px] font-extrabold text-muted-foreground">
-            Second Number
+          <label className="lg:text-[12px] text-[10px] font-extrabold text-muted-foreground">
+            Second Line Digits
           </label>
           <input
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
+            className="border-2  rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
             placeholder="second number"
             min="0"
             max="999"
