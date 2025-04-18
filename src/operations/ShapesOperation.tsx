@@ -92,6 +92,7 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
       utterance.pitch = 1.1;
       window.speechSynthesis.speak(utterance);
     }
+   
   };
   
   return (
@@ -101,7 +102,17 @@ const ShapesOperation: React.FC<ShapesOperationProps> = ({ onComplete }) => {
           variant="ghost" 
           size="icon" 
           className="rounded-full" 
-          onClick={() => setIsMuted(!isMuted)}
+          onClick={() => {
+
+            const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+
+    if (newMutedState && 'speechSynthesis' in window) {
+      // Stop current speech immediately
+      window.speechSynthesis.cancel();
+    }
+
+          }}
         >
           {isMuted ? (
             <VolumeX className="h-5 w-5" />
