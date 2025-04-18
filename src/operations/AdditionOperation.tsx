@@ -97,7 +97,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     setIsCustomProblem(false);
   }, [level]);
 
-  const marginClass = level === 1 ? "lg:mr-44 mr-24" : level === 2 ? "lg:mr-24 mr-10" : "lg:mr-24";
+  const marginClass = level === 1 ? "lg:mr-64 mr-24" : level === 2 ? "lg:mr-44 mr-10" : "lg:mr-24";
   const marginClass2 = level === 1 ? "justify-self-center" : " justify-self-end";
 
   const getDigit = (number: number, place: number) => {
@@ -670,7 +670,15 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setIsMuted(!isMuted)}
+          onClick={() =>{
+            const newMutedState = !isMuted;
+            setIsMuted(newMutedState);
+        
+            if (newMutedState && 'speechSynthesis' in window) {
+              // Stop current speech immediately
+              window.speechSynthesis.cancel();
+            }
+          }}
           className="hover:bg-gray-100"
         >
           {isMuted ? (
