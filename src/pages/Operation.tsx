@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import { Plus, Minus, Divide, X, Hash, Square, Hash as Numbers } from 'lucide-react';
+import { Plus, Minus, Divide, X, Hash, Square, Hash as Numbers, Boxes } from 'lucide-react';
 import AdditionOperation from '../operations/AdditionOperation';
 import SubtractionOperation from '../operations/SubtractionOperation';
 import MultiplicationOperation from '../operations/MultiplicationOperation';
 import DivisionOperation from '../operations/DivisionOperation';
-import FactorialOperation from '../operations/FactorialOperation';
-import DecimalOperation from '../operations/DecimalOperation';
 import CountingOperation from '../operations/CountingOperation';
 import ShapesOperation from '../operations/ShapesOperation';
 import NumbersOperation from '../operations/NumbersOperation';
 import FractionOperation from '@/operations/FractionOperation';
 import { toast } from "@/hooks/use-toast";
+import PatternOperation from '@/operations/PatternOperation';
 
 const Operation: React.FC = () => {
   const { operation, classLevel } = useParams<{ operation: string; classLevel: string }>();
@@ -55,6 +54,8 @@ const Operation: React.FC = () => {
         return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'decimal':
         return <X className="h-5 w-5 sm:h-6 sm:w-6" />;
+        case 'pattern':
+        return <Boxes className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'counting':
         return <Hash className="h-5 w-5 sm:h-6 sm:w-6" />;
       case 'shapes':
@@ -78,7 +79,7 @@ const Operation: React.FC = () => {
         return 'bg-mathOrange';
       case 'fraction':
         return 'bg-mathPink';
-      case 'decimal':
+      case 'pattern':
         return 'bg-mathYellow';
       case 'counting':
         return 'bg-mathTeal';
@@ -103,8 +104,8 @@ const Operation: React.FC = () => {
         return <DivisionOperation key={problemNumber} onComplete={handleComplete} />;
       case 'fraction':
         return <FractionOperation/>;
-      case 'decimal':
-        return <DecimalOperation key={problemNumber} onComplete={handleComplete} />;
+      case 'pattern':
+        return <PatternOperation />;
       case 'counting':
         return <CountingOperation key={problemNumber} onComplete={handleComplete} />;
       case 'shapes':

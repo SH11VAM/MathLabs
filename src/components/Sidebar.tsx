@@ -41,6 +41,7 @@ const classOperations: ClassOperations = {
     { name: "Multiplication", path: "/multiplication/3", icon: "✖️" },
     { name: "Division", path: "/division/3", icon: "➗" },
     { name: "Fraction", path: "/fraction/3", icon: "🌗" },
+    {name:"Pattern", path:"/pattern/3", icon:"🧩"},
   ],
   "Class 4": [
     { name: "Addition", path: "/addition/4", icon: "➕" },

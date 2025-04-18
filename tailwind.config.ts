@@ -202,6 +202,16 @@ export default {
                     purple: '#B56BFF',
                     pink: '#FF6BB5',
                 },
+				game: {
+					red: '#FF5C5C',
+					blue: '#5C9EFF',
+					green: '#5CFF8F',
+					yellow: '#FFD95C',
+					purple: '#C15CFF',
+					orange: '#FFA25C',
+					pink: '#FF5CC1',
+					cyan: '#5CFFFF',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

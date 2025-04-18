@@ -5,7 +5,6 @@ import FractionIntroduction from '@/components/fraction/FractionIntroduction';
 import FractionParts from '@/components/fraction/FractionParts';
 import FractionExamples from '@/components/fraction/FractionExample';
 import InteractiveFractions from '@/components/fraction/InteractiveFractions';
-import FractionConclusion from '@/components/fraction/FractionConclusion';
 
 const FractionOperation = () => {
   const [activeSection, setActiveSection] = useState(0);
@@ -43,11 +42,7 @@ const FractionOperation = () => {
       title: 'Let\'s Practice',
       component: <InteractiveFractions />
     },
-    {
-      id: 'conclusion',
-      title: 'Fractions in Real Life',
-      component: <FractionConclusion />
-    }
+   
   ];
 
   return (
@@ -138,7 +133,7 @@ const FractionOperation = () => {
         )}
       </main>
       
-      
+       
     </div>
   );
 };
