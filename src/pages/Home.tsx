@@ -77,7 +77,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="bg-gradient-to-br from-mathPurple to-mathPink text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+              <div className="bg-gradient-to-br  from-mathBlue to-mathPurple text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
                 2
               </div>
               <div>
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="bg-gradient-to-br from-mathPink to-mathBlue text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+              <div className="bg-gradient-to-br  from-mathBlue to-mathPurple text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
                 3
               </div>
               <div>

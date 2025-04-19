@@ -97,7 +97,7 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
     setIsCustomProblem(false);
   }, [level]);
 
-  const marginClass = level === 1 ? "lg:mr-64 mr-24" : level === 2 ? "lg:mr-44 mr-10" : level==3? "lg:mr-24": "mr-0";
+  const marginClass = level === 1 ? "lg:mr-72 mr-24" : level === 2 ? "lg:mr-44 mr-10" : level==3? "lg:mr-24": "mr-0";
   const marginClass2 = level === 1 ? "justify-self-center" : " justify-self-end";
 
   const getDigit = (number: number, place: number) => {
@@ -446,31 +446,31 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
   };
 
   const renderGeneralCase = () => (
-    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center ">
+    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center shadow-soft shadow-gray-400  ">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md ">
         <div className="flex flex-col gap-2">
-          <label className="lg:text-[12px] text-[10px] font-extrabold text-muted-foreground">
+          <label className="lg:text-[12px] text-[10px] font-extrabold text-black/80">
             First Line Digits
           </label>
           <input
             type="number"
             value={userInput.num1}
             onChange={(e) => handleUserInput(e.target.value, "num1")}
-            className="border-2 rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
+            className="border-2 rounded-md px-3 py-2 text-center lg:text-lg text-sm placeholder:text-sm border-black/60  focus:border-white"
             placeholder="first number"
             min="0"
             max="999"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="lg:text-[12px] text-[10px] font-extrabold text-muted-foreground">
+          <label className="lg:text-[12px] text-[10px] font-extrabold text-black/80">
             Second Line Digits
           </label>
           <input
             type="number"
             value={userInput.num2}
             onChange={(e) => handleUserInput(e.target.value, "num2")}
-            className="border-2  rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm border-black  focus:border-white"
+            className="border-2  rounded-md px-3 py-2   text-center lg:text-lg text-sm placeholder:text-sm border-black/60  focus:border-white"
             placeholder="second number"
             min="0"
             max="999"
@@ -491,9 +491,9 @@ const AdditionOperation: React.FC<AdditionOperationProps> = ({
         </div>
       </div>
 
-      <div className="border-2 border-mathGreen rounded-lg px-4 py-2 bg-green-100/50">
+      <div  className="px-8 py-0.5  border-2 border-black rounded-sm  uppercase bg-white  transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] ">
         {" "}
-        <h3 className="lg:text-xl text-sm font-bold text-mathGreen  mb-2">
+        <h3 className="lg:text-xl text-sm font-bold text-black/70">
           {currentStep < steps.length
             ? steps[currentStep].instruction
             : steps[steps.length - 1].instruction}

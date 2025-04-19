@@ -442,11 +442,11 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
   // };
 
   const renderGeneralCase = () => (
-    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center border border-black">
+    <div className="bg-slate-100 rounded-lg p-4 flex flex-col gap-4 justify-center items-center shadow-soft shadow-zinc-600">
       <div className="mb-6 grid grid-cols-3 gap-4 w-full max-w-md">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-bold text-muted-foreground">
-            First Number
+            First Line Digits
           </label>
           <input
             type="number"
@@ -460,7 +460,7 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-bold text-muted-foreground">
-            Second Number
+            Second Line Digits
           </label>
           <input
             type="number"
@@ -487,8 +487,8 @@ const SubtractionOperation: React.FC<SubtractionOperationProps> = ({
         </div>
       </div>
 
-      <div className="mb-8 text-center border-2 border-black bg-zinc-100 rounded-lg px-4 py-2">
-        <h3 className="text-xl font-medium  mb-2">
+      <div className="px-8 py-0.5  border-2 border-black rounded-sm  uppercase bg-white  transition duration-200 text-sm shadow-[1px_1px_rgba(0,0,0),2px_2px_rgba(0,0,0),3px_3px_rgba(0,0,0),4px_4px_rgba(0,0,0),5px_5px_0px_0px_rgba(0,0,0)] mb-10">
+        <h3 className="text-lg text-black/70 font-bold">
           {currentStep < steps.length
             ? steps[currentStep].instruction
             : steps[steps.length - 1].instruction}

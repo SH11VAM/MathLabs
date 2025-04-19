@@ -58,7 +58,7 @@ const VisualOne: React.FC<VisualOneProps> = ({ firstNumber, secondNumber }) => {
   };
 
   return (
-    <div className="relative lg:min-h-screen overflow-hidden bg-sky-blue lg:w-full w-[38vh] ">
+    <div className="relative lg:min-h-screen overflow-hidden bg-sky-blue lg:w-full w-[38vh] rounded-md p-2 ">
       {/* Sun */}
       <div className="absolute lg:top-8 top-3 right-6 lg:right-12 lg:w-24 lg:h-24 bg-yellow-300 rounded-full shadow-lg animate-pulse">
         {/* Sun rays */}
